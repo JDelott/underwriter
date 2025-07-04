@@ -31,6 +31,7 @@ export default function GlobalChat({ isOpen, onToggle }: GlobalChatProps) {
 
   // Determine context based on current page
   const isDealsPage = pathname === '/deals';
+  const isAnalysisPage = pathname?.includes('/analysis');
   const dealId = params?.id ? parseInt(params.id as string) : undefined;
 
   const scrollToBottom = () => {
@@ -44,16 +45,22 @@ export default function GlobalChat({ isOpen, onToggle }: GlobalChatProps) {
   // Add welcome message based on context
   useEffect(() => {
     if (messages.length === 0) {
-      const welcomeContent = isDealsPage 
-        ? "👋 Hi! I'm here to help you analyze and compare your deals. I have access to all your deal analysis data, so you can ask me to:\n\n• Compare deals side-by-side\n• Identify the best opportunities\n• Analyze specific metrics across deals\n• Highlight risks and opportunities\n• Get insights on financial performance\n\nWhat would you like to explore?"
-        : dealId 
-          ? "👋 Hi! I'm here to help you analyze this deal. I have access to all the analysis data for this property, so you can ask me about specific metrics, risks, opportunities, or any other aspects of this deal."
-          : "👋 Hi! I'm your real estate underwriting assistant. I can help you analyze deals, answer questions about property investment, and provide insights on underwriting decisions. How can I help you today?";
+      let welcomeContent = '';
+      
+      if (isAnalysisPage) {
+        welcomeContent = "🔍 **Analysis Dashboard Chat**\n\nI have access to ALL the detailed analysis data for this deal! I can help you:\n\n• Deep dive into specific metrics and calculations\n• Explain risks and their potential impact\n• Discuss recommendations in detail\n• Compare different document analyses\n• Answer questions about financial highlights\n• Explore property insights and concerns\n\nAsk me anything about the analysis data!";
+      } else if (isDealsPage) {
+        welcomeContent = "📊 **Deal Comparison Chat**\n\nI have access to all your deal analysis data! I can help you:\n\n• Compare deals side-by-side\n• Identify the best opportunities\n• Analyze specific metrics across deals\n• Highlight risks and opportunities\n• Get insights on financial performance\n• Rank deals by various criteria\n\nWhat would you like to explore?";
+      } else if (dealId) {
+        welcomeContent = "🏢 **Deal Overview Chat**\n\nI'm here to help you with this deal! I have access to the basic analysis data and can:\n\n• Discuss deal overview and status\n• Answer questions about uploaded documents\n• Provide insights on analysis results\n• Help with next steps\n\nWhat would you like to know about this deal?";
+      } else {
+        welcomeContent = "👋 **AI Assistant**\n\nI'm your real estate underwriting assistant! I can help you:\n\n• Analyze deals and property investments\n• Answer questions about underwriting\n• Provide insights on market trends\n• Explain financial metrics\n• Guide you through the analysis process\n\nHow can I help you today?";
+      }
       
       const welcomeMessage = createChatMessage('assistant', welcomeContent, dealId);
       setMessages([welcomeMessage]);
     }
-  }, [isDealsPage, dealId, messages.length]);
+  }, [isDealsPage, isAnalysisPage, dealId, messages.length]);
 
   const handleSend = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -74,6 +81,7 @@ export default function GlobalChat({ isOpen, onToggle }: GlobalChatProps) {
           message: userMessage.content,
           dealId: dealId || null,
           isDealsPage: isDealsPage,
+          isAnalysisPage: isAnalysisPage,
           conversationHistory: messages.map(msg => ({
             role: msg.role,
             content: msg.content
@@ -111,6 +119,22 @@ export default function GlobalChat({ isOpen, onToggle }: GlobalChatProps) {
     return null;
   }
 
+  // Determine chat title based on context
+  const getChatTitle = () => {
+    if (isAnalysisPage) return 'Analysis Deep Dive';
+    if (isDealsPage) return 'Deal Comparison';
+    if (dealId) return 'Deal Overview';
+    return 'AI Assistant';
+  };
+
+  // Determine placeholder based on context
+  const getPlaceholder = () => {
+    if (isAnalysisPage) return "Ask about specific metrics, risks, recommendations...";
+    if (isDealsPage) return "Compare deals, analyze metrics...";
+    if (dealId) return "Ask about this deal...";
+    return "Ask me anything about real estate...";
+  };
+
   return (
     <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-black/95 backdrop-blur-lg border border-emerald-400/30 rounded-lg shadow-2xl z-50 flex flex-col">
       {/* Header */}
@@ -118,7 +142,7 @@ export default function GlobalChat({ isOpen, onToggle }: GlobalChatProps) {
         <div className="flex items-center space-x-2">
           <ChatIcon className="text-emerald-400" size={20} />
           <h3 className="text-white font-medium tracking-wide">
-            {isDealsPage ? 'Deal Comparison Chat' : dealId ? 'Deal Analysis Chat' : 'AI Assistant'}
+            {getChatTitle()}
           </h3>
         </div>
         <button
@@ -175,7 +199,7 @@ export default function GlobalChat({ isOpen, onToggle }: GlobalChatProps) {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder={isDealsPage ? "Compare deals, analyze metrics..." : "Ask about this deal..."}
+            placeholder={getPlaceholder()}
             className="flex-1 bg-gray-800 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-emerald-400 focus:outline-none text-sm"
             disabled={isLoading}
           />
