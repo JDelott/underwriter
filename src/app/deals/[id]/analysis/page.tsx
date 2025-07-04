@@ -114,48 +114,34 @@ export default function AnalysisPage() {
 
   return (
     <AppLayout title={`ANALYSIS DASHBOARD - ${deal?.name || `DEAL #${dealId}`}`}>
-      <div className="max-w-[95rem] mx-auto space-y-6">
-        {/* Header Section - Streamlined */}
-        <div className="bg-gradient-to-r from-white/[0.03] to-white/[0.05] border border-emerald-400/20 rounded-lg p-6 shadow-2xl shadow-emerald-400/10">
+      <div className="max-w-[95rem] mx-auto space-y-4">
+        {/* Compact Header - Much Smaller */}
+        <div className="bg-gradient-to-r from-white/[0.03] to-white/[0.05] border border-emerald-400/20 rounded-lg p-4 shadow-xl shadow-emerald-400/5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-green-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-400/40">
-                <span className="text-black font-bold text-xl">📊</span>
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-green-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-400/40">
+                <span className="text-black font-bold text-sm">📊</span>
               </div>
               <div>
-                <h1 className="text-2xl font-light text-white tracking-wide">
+                <h1 className="text-lg font-medium text-white tracking-wide">
                   {deal?.name || `DEAL #${dealId}`}
                 </h1>
-                <div className="flex items-center space-x-4 text-sm text-gray-400">
-                  {deal?.property_type && (
-                    <span className="flex items-center">
-                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2"></span>
-                      {deal.property_type.toUpperCase()}
-                    </span>
-                  )}
-                  {deal?.address && (
-                    <span className="flex items-center">
-                      <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span>
-                      {deal.address}
-                    </span>
-                  )}
-                  <span className="flex items-center">
-                    <span className="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span>
-                    {completedAnalysis} of {totalDocuments} documents analyzed
-                  </span>
+                <div className="flex items-center space-x-3 text-xs text-gray-400">
+                  {deal?.property_type && <span>{deal.property_type.toUpperCase()}</span>}
+                  {deal?.address && <span>• {deal.address}</span>}
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
               <Link
                 href={`/deals/${dealId}`}
-                className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white px-4 py-2 font-bold transition-all duration-200 shadow-lg tracking-wide text-sm"
+                className="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 font-medium transition-all duration-200 text-xs tracking-wide"
               >
                 ← UPLOAD
               </Link>
               <Link
                 href="/deals"
-                className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-4 py-2 font-bold transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide text-sm"
+                className="bg-emerald-400 hover:bg-emerald-300 text-black px-3 py-1.5 font-medium transition-all duration-200 text-xs tracking-wide"
               >
                 ALL DEALS
               </Link>
@@ -163,24 +149,24 @@ export default function AnalysisPage() {
           </div>
         </div>
 
-        {/* Quick Stats - Horizontal */}
-        <div className="grid grid-cols-4 gap-4">
-          <div className="bg-emerald-900/20 border border-emerald-500/30 p-4 rounded-lg">
-            <div className="text-xl font-bold text-emerald-400 mb-1">{totalDocuments}</div>
-            <div className="text-xs text-emerald-300 tracking-wide">TOTAL DOCUMENTS</div>
+        {/* Compact Stats - Much Smaller */}
+        <div className="grid grid-cols-4 gap-3">
+          <div className="bg-emerald-900/20 border border-emerald-500/30 p-3 rounded-lg text-center">
+            <div className="text-lg font-bold text-emerald-400">{totalDocuments}</div>
+            <div className="text-xs text-emerald-300 tracking-wide">DOCS</div>
           </div>
-          <div className="bg-blue-900/20 border border-blue-500/30 p-4 rounded-lg">
-            <div className="text-xl font-bold text-blue-400 mb-1">{completedAnalysis}</div>
+          <div className="bg-blue-900/20 border border-blue-500/30 p-3 rounded-lg text-center">
+            <div className="text-lg font-bold text-blue-400">{completedAnalysis}</div>
             <div className="text-xs text-blue-300 tracking-wide">ANALYZED</div>
           </div>
-          <div className="bg-purple-900/20 border border-purple-500/30 p-4 rounded-lg">
-            <div className="text-xl font-bold text-purple-400 mb-1">
+          <div className="bg-purple-900/20 border border-purple-500/30 p-3 rounded-lg text-center">
+            <div className="text-lg font-bold text-purple-400">
               {totalDocuments > 0 ? Math.round((completedAnalysis / totalDocuments) * 100) : 0}%
             </div>
-            <div className="text-xs text-purple-300 tracking-wide">COMPLETION</div>
+            <div className="text-xs text-purple-300 tracking-wide">COMPLETE</div>
           </div>
-          <div className="bg-cyan-900/20 border border-cyan-500/30 p-4 rounded-lg">
-            <div className="text-xl font-bold text-cyan-400 mb-1">
+          <div className="bg-cyan-900/20 border border-cyan-500/30 p-3 rounded-lg text-center">
+            <div className="text-lg font-bold text-cyan-400">
               {analyzedDocuments.length > 0 ? 
                 Math.round(analyzedDocuments.reduce((acc, doc) => acc + (doc.analysis_result?.confidence || 0), 0) / analyzedDocuments.length * 100) : 0}%
             </div>
@@ -194,13 +180,13 @@ export default function AnalysisPage() {
             <ConsolidatedAnalysisResults documents={documents} />
           </div>
         ) : (
-          <div className="bg-white/[0.03] border border-white/[0.08] rounded-lg p-16 text-center">
-            <div className="text-6xl text-gray-600 mb-6">🤖</div>
-            <h3 className="text-2xl text-gray-400 mb-4 font-light">No Analysis Available</h3>
-            <p className="text-gray-500 mb-8 text-lg">Upload documents and run analysis to see comprehensive results here</p>
+          <div className="bg-white/[0.03] border border-white/[0.08] rounded-lg p-12 text-center">
+            <div className="text-4xl text-gray-600 mb-4">🤖</div>
+            <h3 className="text-lg text-gray-400 mb-3 font-light">No Analysis Available</h3>
+            <p className="text-gray-500 mb-6">Upload documents and run analysis to see results</p>
             <Link
               href={`/deals/${dealId}`}
-              className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
+              className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-6 py-3 font-bold transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
             >
               UPLOAD DOCUMENTS
             </Link>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { SummaryIcon, FinancialIcon, PropertyIcon, RiskIcon, ActionsIcon, ConfidenceIcon, AIIcon } from '@/components/ui/AnalysisIcons';
+import { SummaryIcon, FinancialIcon, PropertyIcon, RiskIcon, ActionsIcon, ConfidenceIcon } from '@/components/ui/AnalysisIcons';
 
 interface AnalysisResult {
   summary: string;
@@ -86,24 +86,7 @@ export default function TabbedAnalysisResults({ analysis, documentName }: Tabbed
 
   return (
     <div className="bg-gradient-to-br from-black/40 to-black/20 border border-white/[0.08] rounded-lg overflow-hidden shadow-2xl">
-      {/* Clean Header - No Branding */}
-      <div className="bg-gradient-to-r from-black/60 to-black/40 p-4 border-b border-white/[0.08]">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-400/40">
-              <AIIcon size={12} className="text-black" />
-            </div>
-            <div>
-              <h4 className="text-sm font-medium text-emerald-400 tracking-wide">DOCUMENT ANALYSIS</h4>
-              <p className="text-xs text-gray-500 truncate max-w-[300px]">{cleanDocumentName(documentName)}</p>
-            </div>
-          </div>
-          <div className="text-xs text-gray-500 bg-black/50 px-3 py-2 rounded">
-            <div className="text-emerald-400 font-bold">AI POWERED</div>
-            <div>ANALYSIS</div>
-          </div>
-        </div>
-      </div>
+      
 
       {/* Enhanced Tab Navigation */}
       <div className="bg-gradient-to-r from-black/30 to-black/20 p-2">
@@ -190,7 +173,7 @@ export default function TabbedAnalysisResults({ analysis, documentName }: Tabbed
                   <div className="flex-1 flex items-center justify-center">
                     <div className="max-w-4xl mx-auto text-center">
                       <p className="text-gray-100 leading-relaxed text-xl font-light italic mb-6">
-                        "{analysis.summary}"
+                        &quot;{analysis.summary}&quot;
                       </p>
                       
                       {/* Key Insights Pills */}

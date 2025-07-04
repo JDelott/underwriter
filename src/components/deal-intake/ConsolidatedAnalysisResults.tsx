@@ -33,7 +33,8 @@ interface ConsolidatedAnalysisResultsProps {
   documents: Document[];
 }
 
-const cleanDocumentName = (filename: string): string => {
+// Cleans document filenames by removing extensions and timestamps
+export const cleanDocumentName = (filename: string): string => {
   // Remove file extensions
   let cleanName = filename.replace(/\.(txt|pdf|doc|docx|xlsx|csv)$/i, '');
   
@@ -143,32 +144,7 @@ export default function ConsolidatedAnalysisResults({ documents }: ConsolidatedA
 
   return (
     <div className="overflow-hidden">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-black/70 to-black/50 p-6 border-b border-white/[0.08]">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-emerald-400 to-green-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-400/40">
-              <span className="text-black font-bold text-lg">AI</span>
-            </div>
-            <div>
-              <h2 className="text-2xl font-light text-white tracking-wide">
-                COMPREHENSIVE ANALYSIS
-              </h2>
-              <p className="text-sm text-gray-400">
-                {analyzedDocuments.length} document{analyzedDocuments.length !== 1 ? 's' : ''} analyzed • AI Powered
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-3">
-            <div className="text-xs text-gray-400 bg-black/50 px-3 py-2 rounded-lg border border-gray-600">
-              AI POWERED
-            </div>
-            <div className="text-xs text-emerald-400 bg-emerald-900/20 px-3 py-2 rounded-lg border border-emerald-500/30">
-              REAL-TIME ANALYSIS
-            </div>
-          </div>
-        </div>
-      </div>
+    
 
       {/* Document Type Tabs - Enhanced */}
       <div className="bg-gradient-to-r from-black/30 to-black/20 border-b border-white/[0.08] px-6 pt-4">
@@ -196,61 +172,18 @@ export default function ConsolidatedAnalysisResults({ documents }: ConsolidatedA
         </div>
       </div>
 
-      {/* Tab Content - Enhanced */}
+      {/* Clean Tab Content - No Document Headers */}
       <div className="min-h-[600px]">
         {activeTab && documentGroups[activeTab] && (
-          <div className="space-y-6 p-6">
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-light text-white mb-2">
-                {getTypeInfo(activeTab).label} ANALYSIS
-              </h3>
-              <p className="text-gray-400">
-                {documentGroups[activeTab].length} document{documentGroups[activeTab].length !== 1 ? 's' : ''} • 
-                Click through the analysis tabs below to explore detailed insights
-              </p>
-            </div>
-
-            {documentGroups[activeTab].map((doc, index) => (
+          <div className="space-y-6 p-4">
+            {documentGroups[activeTab].map((doc) => (
               <div key={doc.id} className="bg-gradient-to-br from-white/[0.02] to-white/[0.04] border border-white/[0.08] rounded-lg shadow-lg overflow-hidden">
-                {/* Document Header */}
-                <div className="bg-gradient-to-r from-black/40 to-black/30 p-5 border-b border-white/[0.08]">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-gray-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-medium text-white mb-1 tracking-wide">
-                          {cleanDocumentName(doc.original_filename)}
-                        </h4>
-                        <div className="flex items-center space-x-4 text-sm text-gray-400">
-                          <span>Uploaded: {new Date(doc.created_at).toLocaleDateString()}</span>
-                          <span className="flex items-center">
-                            <span className="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>
-                            {doc.status.toUpperCase()}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="text-xs text-gray-400 bg-black/50 px-3 py-1 rounded border border-gray-600">
-                        {getTypeInfo(activeTab).label}
-                      </div>
-                      <div className="text-xs text-emerald-400 bg-emerald-900/20 px-3 py-1 rounded border border-emerald-500/30">
-                        ANALYZED
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Analysis Results */}
+                {/* Analysis Results - Direct, No Header */}
                 {doc.analysis_result && (
-                  <div className="p-1">
-                    <TabbedAnalysisResults 
-                      analysis={doc.analysis_result} 
-                      documentName={doc.original_filename}
-                    />
-                  </div>
+                  <TabbedAnalysisResults 
+                    analysis={doc.analysis_result} 
+                    documentName={doc.original_filename}
+                  />
                 )}
               </div>
             ))}
