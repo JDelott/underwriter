@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import AppLayout from '@/components/layout/AppLayout';
 import ConsolidatedAnalysisResults from '@/components/deal-intake/ConsolidatedAnalysisResults';
 
@@ -23,6 +24,7 @@ interface Document {
 
 export default function DealPage() {
   const params = useParams();
+  const router = useRouter();
   const dealId = params.id as string;
   
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -104,17 +106,22 @@ export default function DealPage() {
   };
 
   const handleAnalyze = async () => {
-    setAnalyzing(true);
     try {
+      setAnalyzing(true);
+      
       const response = await fetch(`/api/deals/${dealId}/analyze`, {
         method: 'POST',
       });
 
       if (response.ok) {
-        fetchDocuments();
+        router.push(`/deals/${dealId}/analysis`);
+      } else {
+        console.error('Analysis failed');
+        router.push(`/deals/${dealId}/analysis`);
       }
     } catch (error) {
-      console.error('Analysis failed:', error);
+      console.error('Analysis error:', error);
+      router.push(`/deals/${dealId}/analysis`);
     } finally {
       setAnalyzing(false);
     }
@@ -195,7 +202,7 @@ Special Terms:
   };
 
   return (
-    <AppLayout title={`DEAL #${dealId}`}>
+    <AppLayout title={`DEAL #${dealId} - UPLOAD`}>
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Upload Section */}
         <div className="bg-white/[0.03] border border-emerald-400/20 p-8 shadow-2xl shadow-emerald-400/10">
@@ -341,21 +348,69 @@ Special Terms:
               disabled={analyzing || documents.length === 0}
               className="bg-gradient-to-r from-violet-400 to-purple-500 hover:from-violet-300 hover:to-purple-400 text-black px-8 py-4 font-bold transition-all duration-200 shadow-lg shadow-violet-400/40 hover:shadow-violet-400/60 tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {analyzing ? 'ANALYZING WITH AI...' : 'ANALYZE ALL DOCUMENTS'}
+              {analyzing ? 'ANALYZING WITH AI...' : 'ANALYZE DOCUMENTS & VIEW RESULTS →'}
             </button>
           </div>
         </div>
 
-        {/* Consolidated Analysis Results */}
-        <ConsolidatedAnalysisResults documents={documents} />
-
-        {documents.length === 0 && (
-          <div className="text-center py-16">
-            <div className="text-6xl text-gray-600 mb-4">📄</div>
-            <h3 className="text-xl text-gray-400 mb-2">No documents uploaded</h3>
-            <p className="text-gray-500">Upload documents or add text to begin analysis</p>
+        {/* Documents Summary */}
+        <div className="bg-white/[0.03] border border-white/[0.08] p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-light text-white tracking-wide mb-2">
+                UPLOADED DOCUMENTS
+              </h2>
+              <p className="text-gray-400">
+                {documents.length} documents uploaded • {documents.filter(d => d.analysis_result).length} analyzed
+              </p>
+            </div>
+            {documents.filter(d => d.analysis_result).length > 0 && (
+              <Link
+                href={`/deals/${dealId}/analysis`}
+                className="bg-gradient-to-r from-violet-400 to-purple-500 hover:from-violet-300 hover:to-purple-400 text-black px-6 py-3 font-bold transition-all duration-200 shadow-lg shadow-violet-400/40 hover:shadow-violet-400/60 tracking-wide"
+              >
+                VIEW ANALYSIS DASHBOARD →
+              </Link>
+            )}
           </div>
-        )}
+
+          {/* Document List */}
+          {documents.length > 0 ? (
+            <div className="space-y-3">
+              {documents.map((doc) => (
+                <div key={doc.id} className="bg-black/30 border border-gray-600 p-4 rounded-lg flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="text-2xl">
+                      {doc.original_filename.toLowerCase().includes('rent') ? '📊' :
+                       doc.original_filename.toLowerCase().includes('operating') ? '💰' :
+                       doc.original_filename.toLowerCase().includes('lease') ? '📄' : '📋'}
+                    </div>
+                    <div>
+                      <h3 className="text-white font-medium tracking-wide">{doc.original_filename}</h3>
+                      <p className="text-sm text-gray-400">
+                        {new Date(doc.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className={`text-xs tracking-widest font-bold px-3 py-1 border ${getStatusBg(doc.status)} ${getStatusColor(doc.status)}`}>
+                      {doc.status.toUpperCase()}
+                    </div>
+                    {doc.analysis_result && (
+                      <div className="text-xs text-emerald-400 bg-emerald-900/20 border border-emerald-500/30 px-2 py-1 rounded">
+                        ✓ ANALYZED
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500">
+              No documents uploaded yet
+            </div>
+          )}
+        </div>
       </div>
     </AppLayout>
   );

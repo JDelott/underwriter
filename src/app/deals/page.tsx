@@ -252,6 +252,15 @@ export default function DealsPage() {
             >
               ANALYZE DEAL
             </Link>
+
+            {deals.some(d => d.status === 'completed') && (
+              <Link
+                href={`/deals/${deal.id}/analysis`}
+                className="bg-gradient-to-r from-violet-400 to-purple-500 hover:from-violet-300 hover:to-purple-400 text-black px-4 py-2 font-bold text-sm transition-all duration-200 shadow-lg shadow-violet-400/40 hover:shadow-violet-400/60 tracking-wide"
+              >
+                VIEW ANALYSIS
+              </Link>
+            )}
           </div>
         ))}
       </div>
