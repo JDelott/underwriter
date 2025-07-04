@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AppLayout from '@/components/layout/AppLayout';
-import ConsolidatedAnalysisResults from '@/components/deal-intake/ConsolidatedAnalysisResults';
 
 interface AnalysisResult {
   summary: string;

@@ -78,34 +78,29 @@ export default function Home() {
       <section className="relative z-10 px-8 py-24">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white/[0.03] border border-emerald-400/20 rounded-none p-16 shadow-2xl shadow-emerald-400/10">
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-12 lg:col-span-8">
-                <h2 className="text-6xl md:text-8xl font-light mb-8 leading-none tracking-tight">
-                  <span className="text-white">AI-POWERED</span>
-                  <br />
-                  <span className="text-emerald-400 font-normal drop-shadow-[0_0_20px_rgba(52,211,153,0.5)]">REAL ESTATE</span>
-                  <br />
-                  <span className="text-white">UNDERWRITING</span>
-                </h2>
-                <div className="w-24 h-1 bg-gradient-to-r from-emerald-400 to-green-500 mb-8 shadow-lg shadow-emerald-400/50"></div>
-                <p className="text-xl text-gray-200 mb-12 max-w-2xl font-light leading-relaxed">
-                  Transform deal analysis with intelligent automation. From intake to investment decision in minutes, not weeks.
+            <div className="text-center">
+              <h2 className="text-6xl md:text-8xl font-light mb-8 leading-none tracking-tight">
+                <span className="text-white">AI-POWERED</span>
+                <br />
+                <span className="text-emerald-400 font-normal drop-shadow-[0_0_20px_rgba(52,211,153,0.5)]">REAL ESTATE</span>
+                <br />
+                <span className="text-white">UNDERWRITING</span>
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-emerald-400 to-green-500 mb-8 shadow-lg shadow-emerald-400/50 mx-auto"></div>
+              <p className="text-xl text-gray-200 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+                Transform deal analysis with intelligent automation. From intake to investment decision in minutes, not weeks.
+              </p>
+              
+              <div className="flex flex-col items-center">
+                <button 
+                  onClick={() => window.location.href = '/deals'}
+                  className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-12 py-6 font-bold text-xl transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide transform hover:scale-105"
+                >
+                  START ANALYSIS
+                </button>
+                <p className="text-sm text-emerald-400 mt-4 tracking-wide font-medium">
+                  BEGIN YOUR DEAL EVALUATION
                 </p>
-              </div>
-              <div className="col-span-12 lg:col-span-4 flex flex-col justify-center">
-                <div className="space-y-4">
-                  <button 
-                    onClick={() => window.location.href = '/deals'}
-                    className="w-full bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide">
-                    START ANALYSIS
-                  </button>
-                  <button 
-                    onClick={() => window.location.href = '/test-analysis'}
-                    className="w-full bg-gradient-to-r from-violet-400 to-purple-500 hover:from-violet-300 hover:to-purple-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-violet-400/40 hover:shadow-violet-400/60 tracking-wide"
-                  >
-                    TEST ANALYSIS
-                  </button>
-                </div>
               </div>
             </div>
           </div>
