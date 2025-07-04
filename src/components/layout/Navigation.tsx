@@ -41,6 +41,13 @@ export default function Navigation() {
               DEALS
             </Link>
             
+            <Link
+              href="/deals"
+              className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-4 py-2 font-bold text-sm transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
+            >
+              START
+            </Link>
+            
             {/* Analysis-specific navigation */}
             {isAnalysisPage && dealId && (
               <>

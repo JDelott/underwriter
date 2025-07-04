@@ -47,19 +47,19 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
                   PORTFOLIO
                 </Link>
                 
+                {/* START button - only on landing page */}
+                {pathname === '/' && (
+                  <Link
+                    href="/deals"
+                    className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-4 py-2 font-bold text-sm transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
+                  >
+                    START
+                  </Link>
+                )}
+                
                 {/* Analysis-specific navigation */}
                 {isAnalysisPage && dealId && (
-                  <>
-                    <span className="text-gray-600">•</span>
-                    <Link
-                      href={`/deals/${dealId}`}
-                      className="text-gray-400 hover:text-white transition-colors duration-200 tracking-wide"
-                    >
-                      UPLOAD
-                    </Link>
-                    <span className="text-gray-600">•</span>
-                    <span className="text-emerald-400 tracking-wide">ANALYSIS</span>
-                  </>
+                  <span className="text-emerald-400 tracking-wide">ANALYSIS</span>
                 )}
               </nav>
             </div>
