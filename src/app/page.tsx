@@ -97,8 +97,11 @@ export default function Home() {
                   <button className="w-full bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide">
                     START ANALYSIS
                   </button>
-                  <button className="w-full bg-transparent border-2 border-emerald-400 hover:border-emerald-300 hover:bg-emerald-400/10 px-8 py-4 font-medium text-lg transition-all duration-200 tracking-wide text-emerald-400">
-                    WATCH DEMO
+                  <button 
+                    onClick={() => window.location.href = '/test-analysis'}
+                    className="w-full bg-gradient-to-r from-violet-400 to-purple-500 hover:from-violet-300 hover:to-purple-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-violet-400/40 hover:shadow-violet-400/60 tracking-wide"
+                  >
+                    TEST ANALYSIS
                   </button>
                 </div>
               </div>
