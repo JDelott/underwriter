@@ -94,7 +94,9 @@ export default function Home() {
               </div>
               <div className="col-span-12 lg:col-span-4 flex flex-col justify-center">
                 <div className="space-y-4">
-                  <button className="w-full bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide">
+                  <button 
+                    onClick={() => window.location.href = '/deals'}
+                    className="w-full bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide">
                     START ANALYSIS
                   </button>
                   <button 

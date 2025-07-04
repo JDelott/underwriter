@@ -4,10 +4,11 @@ import { saveFile } from '@/lib/storage';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const dealId = parseInt(params.id);
+    const { id } = await params; // Await params for Next.js 15
+    const dealId = parseInt(id);
     const formData = await request.formData();
     const files = formData.getAll('files') as File[];
 

@@ -16,10 +16,10 @@ export async function GET(
       [dealId]
     );
     
-    // PostgreSQL JSONB columns return objects, not strings
+    // PostgreSQL JSONB returns objects directly, no parsing needed
     const documents = result.rows.map(doc => ({
       ...doc,
-      analysis_result: doc.analysis_result || null // No JSON.parse needed for JSONB
+      analysis_result: doc.analysis_result || null
     }));
     
     console.log(`Found ${documents.length} documents for deal ${dealId}`);
