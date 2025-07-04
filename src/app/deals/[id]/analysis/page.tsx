@@ -115,62 +115,58 @@ export default function AnalysisPage() {
   return (
     <AppLayout title={`ANALYSIS DASHBOARD - ${deal?.name || `DEAL #${dealId}`}`}>
       <div className="max-w-[95rem] mx-auto space-y-4">
-        {/* Compact Header - Much Smaller */}
-        <div className="bg-gradient-to-r from-white/[0.03] to-white/[0.05] border border-emerald-400/20 rounded-lg p-4 shadow-xl shadow-emerald-400/5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-green-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-400/40">
-                <span className="text-black font-bold text-sm">📊</span>
-              </div>
-              <div>
-                <h1 className="text-lg font-medium text-white tracking-wide">
-                  {deal?.name || `DEAL #${dealId}`}
-                </h1>
-                <div className="flex items-center space-x-3 text-xs text-gray-400">
-                  {deal?.property_type && <span>{deal.property_type.toUpperCase()}</span>}
-                  {deal?.address && <span>• {deal.address}</span>}
+        {/* Clean Property & Analytics Container */}
+        <div className="bg-gradient-to-r from-white/[0.03] to-white/[0.05] border border-emerald-400/20 rounded-lg p-6 shadow-xl shadow-emerald-400/5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+            {/* Property Information */}
+            <div className="lg:col-span-1">
+              <div className="space-y-2">
+                <h2 className="text-xl font-medium text-white tracking-wide">
+                  {deal?.name || `Deal #${dealId}`}
+                </h2>
+                <div className="space-y-1">
+                  {deal?.property_type && (
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
+                      <span className="text-sm text-gray-300 tracking-wide">{deal.property_type.toUpperCase()}</span>
+                    </div>
+                  )}
+                  {deal?.address && (
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
+                      <span className="text-sm text-gray-300">{deal.address}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Link
-                href={`/deals/${dealId}`}
-                className="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 font-medium transition-all duration-200 text-xs tracking-wide"
-              >
-                ← UPLOAD
-              </Link>
-              <Link
-                href="/deals"
-                className="bg-emerald-400 hover:bg-emerald-300 text-black px-3 py-1.5 font-medium transition-all duration-200 text-xs tracking-wide"
-              >
-                ALL DEALS
-              </Link>
-            </div>
-          </div>
-        </div>
 
-        {/* Compact Stats - Much Smaller */}
-        <div className="grid grid-cols-4 gap-3">
-          <div className="bg-emerald-900/20 border border-emerald-500/30 p-3 rounded-lg text-center">
-            <div className="text-lg font-bold text-emerald-400">{totalDocuments}</div>
-            <div className="text-xs text-emerald-300 tracking-wide">DOCS</div>
-          </div>
-          <div className="bg-blue-900/20 border border-blue-500/30 p-3 rounded-lg text-center">
-            <div className="text-lg font-bold text-blue-400">{completedAnalysis}</div>
-            <div className="text-xs text-blue-300 tracking-wide">ANALYZED</div>
-          </div>
-          <div className="bg-purple-900/20 border border-purple-500/30 p-3 rounded-lg text-center">
-            <div className="text-lg font-bold text-purple-400">
-              {totalDocuments > 0 ? Math.round((completedAnalysis / totalDocuments) * 100) : 0}%
+            {/* Analytics Grid */}
+            <div className="lg:col-span-2">
+              <div className="grid grid-cols-4 gap-6">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-emerald-400 mb-1">{totalDocuments}</div>
+                  <div className="text-xs text-emerald-300 tracking-wider uppercase">Documents</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-400 mb-1">{completedAnalysis}</div>
+                  <div className="text-xs text-blue-300 tracking-wider uppercase">Analyzed</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-400 mb-1">
+                    {totalDocuments > 0 ? Math.round((completedAnalysis / totalDocuments) * 100) : 0}%
+                  </div>
+                  <div className="text-xs text-purple-300 tracking-wider uppercase">Complete</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-cyan-400 mb-1">
+                    {analyzedDocuments.length > 0 ? 
+                      Math.round(analyzedDocuments.reduce((acc, doc) => acc + (doc.analysis_result?.confidence || 0), 0) / analyzedDocuments.length * 100) : 0}%
+                  </div>
+                  <div className="text-xs text-cyan-300 tracking-wider uppercase">Confidence</div>
+                </div>
+              </div>
             </div>
-            <div className="text-xs text-purple-300 tracking-wide">COMPLETE</div>
-          </div>
-          <div className="bg-cyan-900/20 border border-cyan-500/30 p-3 rounded-lg text-center">
-            <div className="text-lg font-bold text-cyan-400">
-              {analyzedDocuments.length > 0 ? 
-                Math.round(analyzedDocuments.reduce((acc, doc) => acc + (doc.analysis_result?.confidence || 0), 0) / analyzedDocuments.length * 100) : 0}%
-            </div>
-            <div className="text-xs text-cyan-300 tracking-wide">CONFIDENCE</div>
           </div>
         </div>
 

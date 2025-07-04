@@ -125,46 +125,30 @@ export default function ConsolidatedAnalysisResults({ documents }: ConsolidatedA
     setActiveTab(groupKeys[0]);
   }
 
-  const getTabClasses = (type: string, color: string) => {
-    const isActive = activeTab === type;
-    const colorClasses = {
-      emerald: isActive ? 'bg-emerald-400 text-black shadow-emerald-400/40' : 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-400/10',
-      blue: isActive ? 'bg-blue-400 text-black shadow-blue-400/40' : 'text-blue-400 hover:text-blue-300 hover:bg-blue-400/10',
-      purple: isActive ? 'bg-purple-400 text-black shadow-purple-400/40' : 'text-purple-400 hover:text-purple-300 hover:bg-purple-400/10',
-      green: isActive ? 'bg-green-400 text-black shadow-green-400/40' : 'text-green-400 hover:text-green-300 hover:bg-green-400/10',
-      orange: isActive ? 'bg-orange-400 text-black shadow-orange-400/40' : 'text-orange-400 hover:text-orange-300 hover:bg-orange-400/10',
-      red: isActive ? 'bg-red-400 text-black shadow-red-400/40' : 'text-red-400 hover:text-red-300 hover:bg-red-400/10',
-      gray: isActive ? 'bg-gray-400 text-black shadow-gray-400/40' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-400/10'
-    };
-    
-    return `px-6 py-4 text-sm font-bold tracking-wide transition-all duration-200 rounded-t-lg border-b-2 ${
-      isActive ? `border-${color}-400 shadow-lg` : 'border-transparent'
-    } ${colorClasses[color as keyof typeof colorClasses]}`;
-  };
-
   return (
     <div className="overflow-hidden">
-    
-
-      {/* Document Type Tabs - Enhanced */}
-      <div className="bg-gradient-to-r from-black/30 to-black/20 border-b border-white/[0.08] px-6 pt-4">
-        <div className="flex space-x-2 overflow-x-auto pb-4">
+      {/* Compact Document Type Tabs - Much Smaller */}
+      <div className="bg-gradient-to-r from-black/30 to-black/20 border-b border-white/[0.08] px-4 py-2">
+        <div className="flex space-x-1 overflow-x-auto">
           {groupKeys.map((type) => {
             const typeInfo = getTypeInfo(type);
             const docCount = documentGroups[type].length;
+            const isActive = activeTab === type;
             
             return (
               <button
                 key={type}
                 onClick={() => setActiveTab(type)}
-                className={getTabClasses(type, typeInfo.color)}
+                className={`px-3 py-2 text-xs font-bold tracking-wide transition-all duration-200 rounded whitespace-nowrap ${
+                  isActive 
+                    ? `bg-${typeInfo.color}-400 text-black shadow-lg` 
+                    : `text-${typeInfo.color}-400 hover:bg-${typeInfo.color}-400/10`
+                }`}
               >
-                <div className="flex items-center space-x-3 min-w-max">
-                  <span className="text-lg">{typeInfo.icon}</span>
-                  <div className="text-left">
-                    <div className="text-sm font-bold">{typeInfo.label}</div>
-                    <div className="text-xs opacity-75">{docCount} document{docCount !== 1 ? 's' : ''}</div>
-                  </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm">{typeInfo.icon}</span>
+                  <span>{typeInfo.label}</span>
+                  <span className="opacity-75">({docCount})</span>
                 </div>
               </button>
             );
@@ -172,13 +156,13 @@ export default function ConsolidatedAnalysisResults({ documents }: ConsolidatedA
         </div>
       </div>
 
-      {/* Clean Tab Content - No Document Headers */}
+      {/* Direct Tab Content - No Redundant Cards */}
       <div className="min-h-[600px]">
         {activeTab && documentGroups[activeTab] && (
-          <div className="space-y-6 p-4">
+          <div className="space-y-4 p-3">
             {documentGroups[activeTab].map((doc) => (
               <div key={doc.id} className="bg-gradient-to-br from-white/[0.02] to-white/[0.04] border border-white/[0.08] rounded-lg shadow-lg overflow-hidden">
-                {/* Analysis Results - Direct, No Header */}
+                {/* Direct Analysis - No Headers */}
                 {doc.analysis_result && (
                   <TabbedAnalysisResults 
                     analysis={doc.analysis_result} 
