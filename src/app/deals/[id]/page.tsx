@@ -230,7 +230,7 @@ Special Terms:
   };
 
   return (
-    <AppLayout title={`DEAL #${dealId} - UPLOAD`}>
+    <AppLayout>
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Upload Section */}
         <div className="bg-white/[0.03] border border-emerald-400/20 p-8 shadow-2xl shadow-emerald-400/10">
@@ -397,7 +397,7 @@ Special Terms:
                 href={`/deals/${dealId}/analysis`}
                 className="bg-gradient-to-r from-violet-400 to-purple-500 hover:from-violet-300 hover:to-purple-400 text-black px-6 py-3 font-bold transition-all duration-200 shadow-lg shadow-violet-400/40 hover:shadow-violet-400/60 tracking-wide"
               >
-                VIEW ANALYSIS DASHBOARD →
+                VIEW ANALYSIS →
               </Link>
             )}
           </div>
