@@ -111,6 +111,49 @@ Return ONLY the JSON object without any markdown formatting.
   }
 }
 
+// New function for chat with Claude
+export async function chatWithClaude(message: string, dealContext?: string, conversationHistory?: Array<{role: 'user' | 'assistant', content: string}>) {
+  const systemPrompt = `You are a senior real estate underwriting expert with 15+ years of experience. You are helping users analyze real estate deals and answer questions about underwriting, property analysis, and investment decisions.
+
+${dealContext ? `Current Deal Context: ${dealContext}` : ''}
+
+Guidelines:
+- Provide specific, actionable advice
+- Focus on financial analysis, risk assessment, and investment potential
+- Be concise but thorough
+- Ask clarifying questions when needed
+- Reference specific deal details when available
+- Maintain professional tone while being conversational`;
+
+  const messages = [
+    ...(conversationHistory || []).map(msg => ({
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content
+    })),
+    { role: 'user' as const, content: message }
+  ];
+
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 1000,
+      temperature: 0.7,
+      system: systemPrompt,
+      messages: messages
+    });
+
+    const content = response.content[0];
+    if (content.type === 'text') {
+      return content.text;
+    }
+    
+    throw new Error('Unexpected response format from Claude');
+  } catch (error) {
+    console.error('Claude Chat API error:', error);
+    throw new Error('Failed to get response from Claude. Please try again.');
+  }
+}
+
 // New function for batch analysis
 export async function analyzeBatchDocuments(documents: Array<{id: number, content: string, filename: string, type?: string}>) {
   const results = [];

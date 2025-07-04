@@ -20,3 +20,20 @@ export interface Document {
   analysis_result?: unknown;
   created_at: string;
 }
+
+// New Chat Types
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+  dealId?: number;
+}
+
+export interface ChatConversation {
+  id: string;
+  messages: ChatMessage[];
+  dealId?: number;
+  created_at: string;
+  updated_at: string;
+}

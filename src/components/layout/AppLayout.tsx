@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
+import { useState } from 'react';
+import GlobalChat from '@/components/chat/GlobalChat';
+import ChatToggle from '@/components/chat/ChatToggle';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -12,6 +15,7 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
   const params = useParams();
   const pathname = usePathname();
   const dealId = params?.id as string;
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   // Check if we're on an analysis page
   const isAnalysisPage = pathname?.includes('/analysis');
@@ -87,6 +91,15 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
           {children}
         </main>
       </div>
+
+      {/* Global Chat System */}
+      {!isChatOpen && (
+        <ChatToggle onClick={() => setIsChatOpen(true)} />
+      )}
+      <GlobalChat 
+        isOpen={isChatOpen} 
+        onToggle={() => setIsChatOpen(!isChatOpen)} 
+      />
     </div>
   );
 }
