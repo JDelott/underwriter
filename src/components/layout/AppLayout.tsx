@@ -5,7 +5,7 @@ import { useParams, usePathname } from 'next/navigation';
 
 interface AppLayoutProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
 }
 
 export default function AppLayout({ children, title }: AppLayoutProps) {
@@ -41,10 +41,10 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
                 <Link
                   href="/deals"
                   className={`text-gray-400 hover:text-white transition-colors duration-200 tracking-wide ${
-                    pathname?.startsWith('/deals') ? 'text-emerald-400' : ''
+                    pathname?.startsWith('/deals') && !isAnalysisPage ? 'text-emerald-400' : ''
                   }`}
                 >
-                  DEALS
+                  PORTFOLIO
                 </Link>
                 
                 {/* Analysis-specific navigation */}
@@ -67,7 +67,7 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
         </header>
 
         {/* Page Header - Hidden on Analysis Pages */}
-        {!isAnalysisPage && (
+        {!isAnalysisPage && title && (
           <header className="border-b border-emerald-400/20 bg-black/50 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-6 py-4">
               <div className="flex items-center justify-between">

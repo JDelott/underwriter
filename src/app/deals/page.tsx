@@ -132,7 +132,7 @@ export default function DealsPage() {
 
   if (loading) {
     return (
-      <AppLayout title="DEAL PORTFOLIO">
+      <AppLayout>
         <div className="flex items-center justify-center h-64">
           <div className="text-emerald-400 text-xl tracking-wider">LOADING...</div>
         </div>
@@ -141,38 +141,58 @@ export default function DealsPage() {
   }
 
   return (
-    <AppLayout title="DEAL PORTFOLIO">
-      {/* Create Deal Section */}
+    <AppLayout>
+      {/* Portfolio Header with Stats */}
       <div className="mb-12">
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
-        >
-          {showForm ? 'CANCEL' : 'CREATE NEW DEAL'}
-        </button>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-4xl font-light text-white tracking-wide mb-2">Portfolio Overview</h1>
+            <div className="flex items-center space-x-8 text-sm">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
+                <span className="text-gray-300">{deals.length} Total Deals</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span className="text-gray-300">{deals.filter(d => d.status === 'completed').length} Analyzed</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                <span className="text-gray-300">{deals.filter(d => d.status === 'uploaded').length} In Progress</span>
+              </div>
+            </div>
+          </div>
+          
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
+          >
+            {showForm ? 'CANCEL' : 'NEW DEAL'}
+          </button>
+        </div>
 
         {showForm && (
-          <div className="mt-6 bg-white/[0.03] border border-emerald-400/20 p-8 shadow-2xl shadow-emerald-400/10">
-            <h2 className="text-2xl font-light mb-6 text-white tracking-wide">CREATE NEW DEAL</h2>
+          <div className="bg-white/[0.03] border border-emerald-400/20 rounded-lg p-8 shadow-2xl shadow-emerald-400/10">
+            <h2 className="text-2xl font-light mb-6 text-white tracking-wide">Create New Deal</h2>
             <form onSubmit={createDeal} className="space-y-6">
               <div>
-                <label className="block text-gray-300 mb-2 tracking-wide">DEAL NAME</label>
+                <label className="block text-gray-300 mb-2 tracking-wide">Deal Name</label>
                 <input
                   type="text"
                   value={newDeal.name}
                   onChange={(e) => setNewDeal({...newDeal, name: e.target.value})}
-                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors"
+                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
                   placeholder="Enter deal name"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-gray-300 mb-2 tracking-wide">PROPERTY TYPE</label>
+                <label className="block text-gray-300 mb-2 tracking-wide">Property Type</label>
                 <select
                   value={newDeal.property_type}
                   onChange={(e) => setNewDeal({...newDeal, property_type: e.target.value})}
-                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors"
+                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
                 >
                   <option value="">Select Property Type</option>
                   <option value="multifamily">Multifamily</option>
@@ -184,19 +204,19 @@ export default function DealsPage() {
               </div>
               
               <div>
-                <label className="block text-gray-300 mb-2 tracking-wide">ADDRESS</label>
+                <label className="block text-gray-300 mb-2 tracking-wide">Address</label>
                 <input
                   type="text"
                   value={newDeal.address}
                   onChange={(e) => setNewDeal({...newDeal, address: e.target.value})}
-                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors"
+                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
                   placeholder="Enter property address"
                 />
               </div>
               
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
+                className="w-full bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide rounded"
               >
                 CREATE DEAL
               </button>
@@ -206,20 +226,20 @@ export default function DealsPage() {
       </div>
 
       {/* Deals Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {deals.map((deal) => (
-          <div key={deal.id} className="bg-white/[0.03] border border-white/[0.08] p-8 hover:bg-emerald-400/5 hover:border-emerald-400/40 transition-all duration-300 group">
-            <div className="flex items-center justify-between mb-6">
-              <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-green-500 flex items-center justify-center text-xl font-bold shadow-lg shadow-emerald-400/40 text-black">
+          <div key={deal.id} className="bg-white/[0.03] border border-white/[0.08] rounded-lg p-6 hover:bg-emerald-400/5 hover:border-emerald-400/40 transition-all duration-300 group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-10 h-10 bg-gradient-to-r from-emerald-400 to-green-500 rounded-lg flex items-center justify-center text-lg font-bold shadow-lg shadow-emerald-400/40 text-black">
                 {deal.id}
               </div>
               <div className="flex items-center space-x-2">
-                <div className={`text-xs tracking-widest font-bold px-3 py-1 border ${getStatusBg(deal.status)} ${getStatusColor(deal.status)}`}>
+                <div className={`text-xs tracking-widest font-bold px-3 py-1 rounded border ${getStatusBg(deal.status)} ${getStatusColor(deal.status)}`}>
                   {deal.status.toUpperCase()}
                 </div>
                 <button
                   onClick={() => handleDeleteClick(deal)}
-                  className="w-8 h-8 bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 hover:border-red-400 text-red-400 hover:text-red-300 transition-all duration-200 flex items-center justify-center group"
+                  className="w-8 h-8 bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 hover:border-red-400 text-red-400 hover:text-red-300 transition-all duration-200 flex items-center justify-center rounded group"
                   title="Delete Deal"
                 >
                   <span className="text-xs group-hover:scale-110 transition-transform">🗑</span>
@@ -227,40 +247,46 @@ export default function DealsPage() {
               </div>
             </div>
             
-            <h3 className="text-xl font-normal mb-4 text-white tracking-wide">{deal.name}</h3>
+            <h3 className="text-xl font-medium mb-4 text-white tracking-wide">{deal.name}</h3>
             
             <div className="space-y-2 mb-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-emerald-400 shadow-lg shadow-emerald-400/50"></div>
-                <span className="text-gray-300 text-sm tracking-wide">TYPE: {deal.property_type?.toUpperCase() || 'N/A'}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-emerald-400 shadow-lg shadow-emerald-400/50"></div>
-                <span className="text-gray-300 text-sm tracking-wide">ADDRESS: {deal.address || 'N/A'}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-emerald-400 shadow-lg shadow-emerald-400/50"></div>
-                <span className="text-gray-300 text-sm tracking-wide">
-                  CREATED: {new Date(deal.created_at).toLocaleDateString()}
+              {deal.property_type && (
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">{deal.property_type.toUpperCase()}</span>
+                </div>
+              )}
+              {deal.address && (
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">{deal.address}</span>
+                </div>
+              )}
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                <span className="text-gray-300 text-sm">
+                  {new Date(deal.created_at).toLocaleDateString()}
                 </span>
               </div>
             </div>
             
-            <Link
-              href={`/deals/${deal.id}`}
-              className="block w-full bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-6 py-3 font-bold text-center transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
-            >
-              ANALYZE DEAL
-            </Link>
-
-            {deals.some(d => d.status === 'completed') && (
+            <div className="space-y-2">
               <Link
-                href={`/deals/${deal.id}/analysis`}
-                className="bg-gradient-to-r from-violet-400 to-purple-500 hover:from-violet-300 hover:to-purple-400 text-black px-4 py-2 font-bold text-sm transition-all duration-200 shadow-lg shadow-violet-400/40 hover:shadow-violet-400/60 tracking-wide"
+                href={`/deals/${deal.id}`}
+                className="block w-full bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-4 py-3 font-bold text-center transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide rounded"
               >
-                VIEW ANALYSIS
+                ANALYZE DEAL
               </Link>
-            )}
+
+              {deal.status === 'completed' && (
+                <Link
+                  href={`/deals/${deal.id}/analysis`}
+                  className="block w-full bg-gradient-to-r from-violet-400 to-purple-500 hover:from-violet-300 hover:to-purple-400 text-black px-4 py-3 font-bold text-center transition-all duration-200 shadow-lg shadow-violet-400/40 hover:shadow-violet-400/60 tracking-wide rounded"
+                >
+                  VIEW ANALYSIS
+                </Link>
+              )}
+            </div>
           </div>
         ))}
       </div>

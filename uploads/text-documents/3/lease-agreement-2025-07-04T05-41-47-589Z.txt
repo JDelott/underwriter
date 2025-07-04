@@ -1,0 +1,14 @@
+RESIDENTIAL LEASE AGREEMENT
+
+Property: 123 Main St, Unit 2A
+Tenant: John Smith
+Lease Term: 12 months
+Monthly Rent: $1,300
+Security Deposit: $1,300
+Lease Start: January 1, 2024
+Lease End: December 31, 2024
+
+Special Terms:
+- Pets allowed with $200 deposit
+- Tenant responsible for utilities
+- 60-day notice required for termination
