@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AppLayout from '@/components/layout/AppLayout';
+import DeleteModal from '@/components/ui/DeleteModal';
 
 interface Deal {
   id: number;
@@ -18,6 +19,14 @@ export default function DealsPage() {
   const [loading, setLoading] = useState(true);
   const [newDeal, setNewDeal] = useState({ name: '', property_type: '', address: '' });
   const [showForm, setShowForm] = useState(false);
+  
+  // Delete modal state
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    dealId: 0,
+    dealName: '',
+    isDeleting: false
+  });
 
   useEffect(() => {
     fetchDeals();
@@ -54,6 +63,53 @@ export default function DealsPage() {
     } catch (error) {
       console.error('Failed to create deal:', error);
     }
+  };
+
+  const handleDeleteClick = (deal: Deal) => {
+    setDeleteModal({
+      isOpen: true,
+      dealId: deal.id,
+      dealName: deal.name,
+      isDeleting: false
+    });
+  };
+
+  const handleDeleteConfirm = async () => {
+    setDeleteModal(prev => ({ ...prev, isDeleting: true }));
+    
+    try {
+      const response = await fetch(`/api/deals/${deleteModal.dealId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Remove deal from local state
+        setDeals(deals.filter(deal => deal.id !== deleteModal.dealId));
+        
+        // Close modal
+        setDeleteModal({
+          isOpen: false,
+          dealId: 0,
+          dealName: '',
+          isDeleting: false
+        });
+      } else {
+        console.error('Failed to delete deal');
+        setDeleteModal(prev => ({ ...prev, isDeleting: false }));
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      setDeleteModal(prev => ({ ...prev, isDeleting: false }));
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModal({
+      isOpen: false,
+      dealId: 0,
+      dealName: '',
+      isDeleting: false
+    });
   };
 
   const getStatusColor = (status: string) => {
@@ -157,8 +213,17 @@ export default function DealsPage() {
               <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-green-500 flex items-center justify-center text-xl font-bold shadow-lg shadow-emerald-400/40 text-black">
                 {deal.id}
               </div>
-              <div className={`text-xs tracking-widest font-bold px-3 py-1 border ${getStatusBg(deal.status)} ${getStatusColor(deal.status)}`}>
-                {deal.status.toUpperCase()}
+              <div className="flex items-center space-x-2">
+                <div className={`text-xs tracking-widest font-bold px-3 py-1 border ${getStatusBg(deal.status)} ${getStatusColor(deal.status)}`}>
+                  {deal.status.toUpperCase()}
+                </div>
+                <button
+                  onClick={() => handleDeleteClick(deal)}
+                  className="w-8 h-8 bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 hover:border-red-400 text-red-400 hover:text-red-300 transition-all duration-200 flex items-center justify-center group"
+                  title="Delete Deal"
+                >
+                  <span className="text-xs group-hover:scale-110 transition-transform">🗑</span>
+                </button>
               </div>
             </div>
             
@@ -198,6 +263,17 @@ export default function DealsPage() {
           <p className="text-gray-500">Create your first deal to get started</p>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteModal
+        isOpen={deleteModal.isOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="DELETE DEAL"
+        message="Are you sure you want to delete this deal? This action cannot be undone and will remove all associated documents and analysis."
+        dealName={deleteModal.dealName}
+        isDeleting={deleteModal.isDeleting}
+      />
     </AppLayout>
   );
 }

@@ -1,19 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 
-// GET all deals (listing)
-export async function GET() {
-  try {
-    const result = await query('SELECT * FROM deals ORDER BY created_at DESC');
-    return NextResponse.json(result.rows);
-  } catch (error) {
-    console.error('Database error:', error);
-    return NextResponse.json({ error: 'Failed to fetch deals' }, { status: 500 });
-  }
-}
-
 // GET single deal
-export async function GET_individual(
+export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -35,7 +24,7 @@ export async function GET_individual(
 }
 
 // PUT - Update deal
-export async function PUT_individual(
+export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -60,25 +49,8 @@ export async function PUT_individual(
   }
 }
 
-// POST - Create new deal
-export async function POST(request: NextRequest) {
-  try {
-    const { name, property_type, address } = await request.json();
-    
-    const result = await query(
-      'INSERT INTO deals (name, property_type, address) VALUES ($1, $2, $3) RETURNING *',
-      [name, property_type, address]
-    );
-    
-    return NextResponse.json(result.rows[0]);
-  } catch (error) {
-    console.error('Database error:', error);
-    return NextResponse.json({ error: 'Failed to create deal' }, { status: 500 });
-  }
-}
-
 // DELETE - Delete deal
-export async function DELETE_individual(
+export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
