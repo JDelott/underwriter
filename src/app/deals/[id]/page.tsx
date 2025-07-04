@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
-import AnalysisResults from '@/components/deal-intake/AnalysisResults';
+import ConsolidatedAnalysisResults from '@/components/deal-intake/ConsolidatedAnalysisResults';
 
 interface AnalysisResult {
   summary: string;
@@ -346,31 +346,8 @@ Special Terms:
           </div>
         </div>
 
-        {/* Documents List */}
-        <div className="space-y-6">
-          {documents.map((doc) => (
-            <div key={doc.id} className="bg-white/[0.03] border border-white/[0.08] p-8 hover:bg-emerald-400/5 hover:border-emerald-400/40 transition-all duration-300">
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h3 className="text-xl font-normal text-white mb-2 tracking-wide">{doc.original_filename}</h3>
-                  <p className="text-sm text-gray-400 tracking-wide">
-                    Uploaded: {new Date(doc.created_at).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className={`text-xs tracking-widest font-bold px-3 py-1 border ${getStatusBg(doc.status)} ${getStatusColor(doc.status)}`}>
-                  {doc.status.toUpperCase()}
-                </div>
-              </div>
-              
-              {doc.analysis_result && (
-                <AnalysisResults 
-                  analysis={doc.analysis_result} 
-                  documentName={doc.original_filename}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+        {/* Consolidated Analysis Results */}
+        <ConsolidatedAnalysisResults documents={documents} />
 
         {documents.length === 0 && (
           <div className="text-center py-16">

@@ -1,0 +1,13 @@
+Property: 123 Main Street Apartments
+Total Units: 24
+Monthly Rent Roll:
+
+Unit 1A: $1,200/month - Occupied
+Unit 1B: $1,150/month - Occupied  
+Unit 2A: $1,300/month - Vacant
+Unit 2B: $1,250/month - Occupied
+Unit 3A: $1,400/month - Occupied
+
+Total Monthly Income: $28,800
+Occupancy Rate: 83%
+Average Rent: $1,260
