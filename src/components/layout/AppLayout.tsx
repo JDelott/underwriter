@@ -38,14 +38,15 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
 
               {/* Main Navigation */}
               <nav className="flex items-center space-x-8 text-sm">
-                <Link
-                  href="/deals"
-                  className={`text-gray-400 hover:text-white transition-colors duration-200 tracking-wide ${
-                    pathname?.startsWith('/deals') && !isAnalysisPage ? 'text-emerald-400' : ''
-                  }`}
-                >
-                  PORTFOLIO
-                </Link>
+                {/* Show DEALS link on home page and analysis pages */}
+                {(pathname === '/' || pathname?.includes('/analysis')) && (
+                  <Link
+                    href="/deals"
+                    className="px-4 py-2 font-bold transition-all duration-200 tracking-wide text-gray-300 hover:text-emerald-400 rounded"
+                  >
+                    DEALS
+                  </Link>
+                )}
                 
                 {/* START button - only on landing page */}
                 {pathname === '/' && (

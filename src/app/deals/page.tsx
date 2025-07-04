@@ -142,11 +142,11 @@ export default function DealsPage() {
 
   return (
     <AppLayout>
-      {/* Portfolio Header with Stats */}
+      {/* Deal Overview Header with Stats */}
       <div className="mb-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-light text-white tracking-wide mb-2">Portfolio Overview</h1>
+            <h1 className="text-4xl font-light text-white tracking-wide mb-2">Deal Overview</h1>
             <div className="flex items-center space-x-8 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
@@ -172,27 +172,27 @@ export default function DealsPage() {
         </div>
 
         {showForm && (
-          <div className="bg-white/[0.03] border border-emerald-400/20 rounded-lg p-8 shadow-2xl shadow-emerald-400/10">
+          <div className="bg-white/[0.08] border border-emerald-400/30 rounded-lg p-8 shadow-2xl shadow-emerald-400/10 backdrop-blur-sm">
             <h2 className="text-2xl font-light mb-6 text-white tracking-wide">Create New Deal</h2>
             <form onSubmit={createDeal} className="space-y-6">
               <div>
-                <label className="block text-gray-300 mb-2 tracking-wide">Deal Name</label>
+                <label className="block text-gray-200 mb-2 tracking-wide font-medium">Deal Name</label>
                 <input
                   type="text"
                   value={newDeal.name}
                   onChange={(e) => setNewDeal({...newDeal, name: e.target.value})}
-                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
+                  className="w-full bg-black/60 border border-gray-500 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
                   placeholder="Enter deal name"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-gray-300 mb-2 tracking-wide">Property Type</label>
+                <label className="block text-gray-200 mb-2 tracking-wide font-medium">Property Type</label>
                 <select
                   value={newDeal.property_type}
                   onChange={(e) => setNewDeal({...newDeal, property_type: e.target.value})}
-                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
+                  className="w-full bg-black/60 border border-gray-500 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
                 >
                   <option value="">Select Property Type</option>
                   <option value="multifamily">Multifamily</option>
@@ -204,12 +204,12 @@ export default function DealsPage() {
               </div>
               
               <div>
-                <label className="block text-gray-300 mb-2 tracking-wide">Address</label>
+                <label className="block text-gray-200 mb-2 tracking-wide font-medium">Address</label>
                 <input
                   type="text"
                   value={newDeal.address}
                   onChange={(e) => setNewDeal({...newDeal, address: e.target.value})}
-                  className="w-full bg-black/50 border border-gray-600 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
+                  className="w-full bg-black/60 border border-gray-500 text-white px-4 py-3 focus:border-emerald-400 focus:outline-none transition-colors rounded"
                   placeholder="Enter property address"
                 />
               </div>
@@ -228,7 +228,7 @@ export default function DealsPage() {
       {/* Deals Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {deals.map((deal) => (
-          <div key={deal.id} className="bg-white/[0.03] border border-white/[0.08] rounded-lg p-6 hover:bg-emerald-400/5 hover:border-emerald-400/40 transition-all duration-300 group">
+          <div key={deal.id} className="bg-white/[0.08] border border-white/[0.15] rounded-lg p-6 hover:bg-emerald-400/10 hover:border-emerald-400/50 transition-all duration-300 group shadow-lg shadow-black/30">
             <div className="flex items-center justify-between mb-4">
               <div className="w-10 h-10 bg-gradient-to-r from-emerald-400 to-green-500 rounded-lg flex items-center justify-center text-lg font-bold shadow-lg shadow-emerald-400/40 text-black">
                 {deal.id}
@@ -239,7 +239,7 @@ export default function DealsPage() {
                 </div>
                 <button
                   onClick={() => handleDeleteClick(deal)}
-                  className="w-8 h-8 bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 hover:border-red-400 text-red-400 hover:text-red-300 transition-all duration-200 flex items-center justify-center rounded group"
+                  className="w-8 h-8 bg-red-500/30 hover:bg-red-500/50 border border-red-500/40 hover:border-red-400 text-red-400 hover:text-red-300 transition-all duration-200 flex items-center justify-center rounded group"
                   title="Delete Deal"
                 >
                   <span className="text-xs group-hover:scale-110 transition-transform">🗑</span>
@@ -252,19 +252,19 @@ export default function DealsPage() {
             <div className="space-y-2 mb-6">
               {deal.property_type && (
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-                  <span className="text-gray-300 text-sm">{deal.property_type.toUpperCase()}</span>
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full shadow-sm shadow-emerald-400/60"></div>
+                  <span className="text-gray-200 text-sm font-medium">{deal.property_type.toUpperCase()}</span>
                 </div>
               )}
               {deal.address && (
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span className="text-gray-300 text-sm">{deal.address}</span>
+                  <div className="w-2 h-2 bg-blue-400 rounded-full shadow-sm shadow-blue-400/60"></div>
+                  <span className="text-gray-200 text-sm">{deal.address}</span>
                 </div>
               )}
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <span className="text-gray-300 text-sm">
+                <div className="w-2 h-2 bg-purple-400 rounded-full shadow-sm shadow-purple-400/60"></div>
+                <span className="text-gray-200 text-sm">
                   {new Date(deal.created_at).toLocaleDateString()}
                 </span>
               </div>
