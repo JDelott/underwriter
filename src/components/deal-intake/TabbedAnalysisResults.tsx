@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { SummaryIcon, FinancialIcon, PropertyIcon, RiskIcon, ActionsIcon, ConfidenceIcon, AIIcon } from '@/components/ui/AnalysisIcons';
 
 interface AnalysisResult {
   summary: string;
@@ -30,299 +31,431 @@ export default function TabbedAnalysisResults({ analysis, documentName }: Tabbed
   const [activeTab, setActiveTab] = useState<TabType>('summary');
 
   const tabs = [
-    { id: 'summary', label: 'EXECUTIVE SUMMARY', icon: '📊', color: 'emerald' },
-    { id: 'financial', label: 'FINANCIAL METRICS', icon: '💰', color: 'blue' },
-    { id: 'property', label: 'PROPERTY INSIGHTS', icon: '🏢', color: 'green' },
-    { id: 'risks', label: 'RISK ASSESSMENT', icon: '⚠️', color: 'red' },
-    { id: 'recommendations', label: 'RECOMMENDATIONS', icon: '💡', color: 'cyan' },
-    { id: 'confidence', label: 'AI CONFIDENCE', icon: '🎯', color: 'purple' }
+    { id: 'summary', label: 'SUMMARY', icon: SummaryIcon, color: 'emerald' },
+    { id: 'financial', label: 'FINANCIAL', icon: FinancialIcon, color: 'blue' },
+    { id: 'property', label: 'PROPERTY', icon: PropertyIcon, color: 'green' },
+    { id: 'risks', label: 'RISKS', icon: RiskIcon, color: 'red' },
+    { id: 'recommendations', label: 'ACTIONS', icon: ActionsIcon, color: 'cyan' },
+    { id: 'confidence', label: 'CONFIDENCE', icon: ConfidenceIcon, color: 'purple' }
   ];
 
   const getTabClasses = (tabId: string, color: string) => {
     const isActive = activeTab === tabId;
     const colorClasses = {
-      emerald: isActive ? 'bg-emerald-400 text-black shadow-emerald-400/40' : 'text-emerald-400 hover:text-emerald-300',
-      blue: isActive ? 'bg-blue-400 text-black shadow-blue-400/40' : 'text-blue-400 hover:text-blue-300',
-      green: isActive ? 'bg-green-400 text-black shadow-green-400/40' : 'text-green-400 hover:text-green-300',
-      red: isActive ? 'bg-red-400 text-black shadow-red-400/40' : 'text-red-400 hover:text-red-300',
-      cyan: isActive ? 'bg-cyan-400 text-black shadow-cyan-400/40' : 'text-cyan-400 hover:text-cyan-300',
-      purple: isActive ? 'bg-purple-400 text-black shadow-purple-400/40' : 'text-purple-400 hover:text-purple-300'
+      emerald: isActive ? 'bg-emerald-400 text-black shadow-lg shadow-emerald-400/30' : 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-400/5',
+      blue: isActive ? 'bg-blue-400 text-black shadow-lg shadow-blue-400/30' : 'text-blue-400 hover:text-blue-300 hover:bg-blue-400/5',
+      green: isActive ? 'bg-green-400 text-black shadow-lg shadow-green-400/30' : 'text-green-400 hover:text-green-300 hover:bg-green-400/5',
+      red: isActive ? 'bg-red-400 text-black shadow-lg shadow-red-400/30' : 'text-red-400 hover:text-red-300 hover:bg-red-400/5',
+      cyan: isActive ? 'bg-cyan-400 text-black shadow-lg shadow-cyan-400/30' : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/5',
+      purple: isActive ? 'bg-purple-400 text-black shadow-lg shadow-purple-400/30' : 'text-purple-400 hover:text-purple-300 hover:bg-purple-400/5'
     };
     
-    return `px-4 py-3 text-sm font-bold tracking-wide transition-all duration-200 border-b-2 ${
-      isActive ? `border-${color}-400 shadow-lg` : 'border-transparent hover:border-gray-600'
-    } ${colorClasses[color as keyof typeof colorClasses]}`;
+    return `flex-1 px-3 py-4 text-xs font-bold tracking-wider transition-all duration-300 text-center rounded-t-lg ${
+      colorClasses[color as keyof typeof colorClasses]
+    } ${isActive ? 'transform translate-y-0' : 'hover:transform hover:-translate-y-1'}`;
   };
 
   return (
-    <div className="bg-black/30 border border-gray-600 rounded-lg overflow-hidden">
-      {/* Header */}
-      <div className="bg-black/50 p-4 border-b border-gray-600">
+    <div className="bg-gradient-to-br from-black/40 to-black/20 border border-white/[0.08] rounded-lg overflow-hidden shadow-2xl">
+      {/* Compact Header */}
+      <div className="bg-gradient-to-r from-black/60 to-black/40 p-4 border-b border-white/[0.08]">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-emerald-400 rounded-full flex items-center justify-center">
-              <span className="text-black font-bold text-sm">AI</span>
+            <div className="w-6 h-6 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-400/40">
+              <AIIcon size={12} className="text-black" />
             </div>
             <div>
-              <h4 className="text-lg font-medium text-emerald-400 tracking-wide">
-                CLAUDE 4 ANALYSIS
-              </h4>
-              <p className="text-xs text-gray-400">{documentName}</p>
+              <h4 className="text-sm font-medium text-emerald-400 tracking-wide">CLAUDE ANALYSIS</h4>
+              <p className="text-xs text-gray-500 truncate max-w-[200px]">{documentName}</p>
             </div>
           </div>
-          <div className="text-xs text-gray-400 bg-gray-800 px-3 py-1 rounded">
-            ANTHROPIC CLAUDE 3.5 SONNET
+          <div className="text-xs text-gray-500 bg-black/50 px-2 py-1 rounded text-center">
+            <div className="text-emerald-400 font-bold">ANTHROPIC</div>
+            <div>CLAUDE 3.5</div>
           </div>
         </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="bg-black/20 border-b border-gray-600 overflow-x-auto">
-        <div className="flex min-w-max">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as TabType)}
-              className={getTabClasses(tab.id, tab.color)}
-            >
-              <span className="mr-2">{tab.icon}</span>
-              {tab.label}
-            </button>
-          ))}
+      {/* Enhanced Tab Navigation */}
+      <div className="bg-gradient-to-r from-black/30 to-black/20 p-2">
+        <div className="grid grid-cols-6 gap-1">
+          {tabs.map((tab) => {
+            const IconComponent = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as TabType)}
+                className={getTabClasses(tab.id, tab.color)}
+              >
+                <div className="flex flex-col items-center space-y-1">
+                  <IconComponent size={16} className="text-current" />
+                  <span className="text-xs font-bold tracking-wider">{tab.label}</span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Tab Content */}
-      <div className="p-6 min-h-[400px]">
+      {/* Enhanced Tab Content with Uniform Sizing */}
+      <div className="p-6 h-[700px] overflow-y-auto bg-gradient-to-br from-white/[0.02] to-transparent">
         {/* Executive Summary Tab */}
         {activeTab === 'summary' && (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 mb-4">
-              <span className="w-3 h-3 bg-emerald-400 rounded-full"></span>
-              <h5 className="text-lg font-medium text-emerald-400 tracking-wide">EXECUTIVE SUMMARY</h5>
+          <div className="h-full flex flex-col animate-in slide-in-from-right-4 duration-300">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-8 h-8 bg-emerald-400 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-400/40">
+                <SummaryIcon size={16} className="text-black" />
+              </div>
+              <h5 className="text-xl font-light text-emerald-400 tracking-wide">EXECUTIVE SUMMARY</h5>
             </div>
-            <div className="bg-emerald-900/20 border border-emerald-500/30 p-6 rounded-lg">
-              <p className="text-gray-300 leading-relaxed text-base">{analysis.summary}</p>
+            <div className="flex-1 flex flex-col">
+              <div className="bg-gradient-to-br from-emerald-900/30 to-emerald-800/20 border border-emerald-500/30 p-8 rounded-xl shadow-lg flex-1 flex items-center">
+                <p className="text-gray-200 leading-relaxed text-base font-light w-full">{analysis.summary}</p>
+              </div>
             </div>
           </div>
         )}
 
         {/* Financial Metrics Tab */}
         {activeTab === 'financial' && (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 mb-4">
-              <span className="w-3 h-3 bg-blue-400 rounded-full"></span>
-              <h5 className="text-lg font-medium text-blue-400 tracking-wide">FINANCIAL METRICS</h5>
+          <div className="h-full flex flex-col animate-in slide-in-from-right-4 duration-300">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center shadow-lg shadow-blue-400/40">
+                <FinancialIcon size={16} className="text-black" />
+              </div>
+              <h5 className="text-xl font-light text-blue-400 tracking-wide">FINANCIAL METRICS</h5>
             </div>
             
-            {/* Key Metrics */}
-            {analysis.key_metrics && Object.keys(analysis.key_metrics).length > 0 && (
-              <div className="bg-blue-900/20 border border-blue-500/30 p-6 rounded-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {Object.entries(analysis.key_metrics).map(([key, value]) => (
-                    <div key={key} className="bg-blue-800/30 p-4 rounded border border-blue-500/20">
-                      <div className="text-sm text-blue-300 font-medium mb-1">{key}</div>
-                      <div className="text-xl text-blue-400 font-bold">{String(value)}</div>
-                    </div>
-                  ))}
+            <div className="flex-1 space-y-6 overflow-y-auto">
+              {/* Key Metrics Grid */}
+              {analysis.key_metrics && Object.keys(analysis.key_metrics).length > 0 && (
+                <div className="space-y-4">
+                  <h6 className="text-sm font-medium text-blue-300 tracking-wide uppercase">Key Performance Indicators</h6>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[200px]">
+                    {Object.entries(analysis.key_metrics).map(([key, value]) => (
+                      <div key={key} className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-500/30 p-6 rounded-xl shadow-lg hover:shadow-blue-400/20 transition-all duration-300 hover:scale-105 h-[120px] flex flex-col justify-between">
+                        <div className="text-sm text-blue-300 font-medium tracking-wide uppercase">{key}</div>
+                        <div className="text-2xl text-blue-400 font-bold">{String(value)}</div>
+                      </div>
+                    ))}
+                    {/* Fill empty slots to maintain grid */}
+                    {Array.from({ length: Math.max(0, 6 - Object.keys(analysis.key_metrics).length) }).map((_, index) => (
+                      <div key={`empty-${index}`} className="h-[120px]" />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Financial Highlights */}
-            {analysis.financial_highlights && (
-              <div className="bg-purple-900/20 border border-purple-500/30 p-6 rounded-lg">
-                <h6 className="text-md font-medium text-purple-400 mb-4 tracking-wide">FINANCIAL HIGHLIGHTS</h6>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {analysis.financial_highlights.revenue_items && analysis.financial_highlights.revenue_items.length > 0 && (
-                    <div>
-                      <div className="text-sm font-medium text-purple-300 mb-3 tracking-wide">REVENUE DRIVERS</div>
-                      <div className="space-y-2">
-                        {analysis.financial_highlights.revenue_items.map((item, index) => (
-                          <div key={index} className="text-sm text-purple-200 flex items-center bg-purple-800/20 p-2 rounded">
-                            <span className="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
-                            {item}
-                          </div>
-                        ))}
+              {/* Financial Highlights */}
+              {analysis.financial_highlights && (
+                <div className="space-y-4">
+                  <h6 className="text-sm font-medium text-purple-300 tracking-wide uppercase">Financial Highlights</h6>
+                  <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 border border-purple-500/30 p-6 rounded-xl shadow-lg min-h-[300px]">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+                      <div className="space-y-3">
+                        <div className="text-sm font-bold text-purple-300 tracking-wide uppercase flex items-center">
+                          <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
+                          Revenue Drivers
+                        </div>
+                        <div className="space-y-2 h-[200px] overflow-y-auto">
+                          {analysis.financial_highlights.revenue_items && analysis.financial_highlights.revenue_items.length > 0 ? (
+                            analysis.financial_highlights.revenue_items.map((item, index) => (
+                              <div key={index} className="bg-purple-800/30 p-3 rounded-lg border border-purple-500/20 text-sm text-purple-200 hover:bg-purple-800/40 transition-colors">
+                                {item}
+                              </div>
+                            ))
+                          ) : (
+                            <div className="bg-purple-800/20 p-4 rounded-lg text-center text-purple-300 text-sm">
+                              No revenue data available
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="text-sm font-bold text-purple-300 tracking-wide uppercase flex items-center">
+                          <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
+                          Expense Categories
+                        </div>
+                        <div className="space-y-2 h-[200px] overflow-y-auto">
+                          {analysis.financial_highlights.expense_items && analysis.financial_highlights.expense_items.length > 0 ? (
+                            analysis.financial_highlights.expense_items.map((item, index) => (
+                              <div key={index} className="bg-purple-800/30 p-3 rounded-lg border border-purple-500/20 text-sm text-purple-200 hover:bg-purple-800/40 transition-colors">
+                                {item}
+                              </div>
+                            ))
+                          ) : (
+                            <div className="bg-purple-800/20 p-4 rounded-lg text-center text-purple-300 text-sm">
+                              No expense data available
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="text-sm font-bold text-purple-300 tracking-wide uppercase flex items-center">
+                          <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
+                          Profitability
+                        </div>
+                        <div className="space-y-2 h-[200px] overflow-y-auto">
+                          {analysis.financial_highlights.profitability_notes && analysis.financial_highlights.profitability_notes.length > 0 ? (
+                            analysis.financial_highlights.profitability_notes.map((note, index) => (
+                              <div key={index} className="bg-purple-800/30 p-3 rounded-lg border border-purple-500/20 text-sm text-purple-200 hover:bg-purple-800/40 transition-colors">
+                                {note}
+                              </div>
+                            ))
+                          ) : (
+                            <div className="bg-purple-800/20 p-4 rounded-lg text-center text-purple-300 text-sm">
+                              No profitability data available
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  )}
-
-                  {analysis.financial_highlights.expense_items && analysis.financial_highlights.expense_items.length > 0 && (
-                    <div>
-                      <div className="text-sm font-medium text-purple-300 mb-3 tracking-wide">EXPENSE CATEGORIES</div>
-                      <div className="space-y-2">
-                        {analysis.financial_highlights.expense_items.map((item, index) => (
-                          <div key={index} className="text-sm text-purple-200 flex items-center bg-purple-800/20 p-2 rounded">
-                            <span className="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
-                            {item}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {analysis.financial_highlights.profitability_notes && analysis.financial_highlights.profitability_notes.length > 0 && (
-                    <div>
-                      <div className="text-sm font-medium text-purple-300 mb-3 tracking-wide">PROFITABILITY NOTES</div>
-                      <div className="space-y-2">
-                        {analysis.financial_highlights.profitability_notes.map((note, index) => (
-                          <div key={index} className="text-sm text-purple-200 flex items-center bg-purple-800/20 p-2 rounded">
-                            <span className="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
-                            {note}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
 
         {/* Property Insights Tab */}
         {activeTab === 'property' && (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 mb-4">
-              <span className="w-3 h-3 bg-green-400 rounded-full"></span>
-              <h5 className="text-lg font-medium text-green-400 tracking-wide">PROPERTY INSIGHTS</h5>
+          <div className="h-full flex flex-col animate-in slide-in-from-right-4 duration-300">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-8 h-8 bg-green-400 rounded-lg flex items-center justify-center shadow-lg shadow-green-400/40">
+                <PropertyIcon size={16} className="text-black" />
+              </div>
+              <h5 className="text-xl font-light text-green-400 tracking-wide">PROPERTY INSIGHTS</h5>
             </div>
             
-            {analysis.property_insights && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Strengths */}
-                {analysis.property_insights.strengths && analysis.property_insights.strengths.length > 0 && (
-                  <div className="bg-green-900/20 border border-green-500/30 p-6 rounded-lg">
-                    <h6 className="text-md font-medium text-green-400 mb-4 tracking-wide">PROPERTY STRENGTHS</h6>
-                    <div className="space-y-3">
-                      {analysis.property_insights.strengths.map((strength, index) => (
-                        <div key={index} className="bg-green-800/30 p-3 rounded border border-green-500/20">
-                          <div className="flex items-start space-x-3">
-                            <span className="text-green-400 mt-1 text-lg">✓</span>
-                            <span className="text-green-300 text-sm leading-relaxed">{strength}</span>
+            <div className="flex-1">
+              {analysis.property_insights ? (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                  {/* Strengths */}
+                  <div className="bg-gradient-to-br from-green-900/30 to-green-800/20 border border-green-500/30 p-6 rounded-xl shadow-lg h-[550px] flex flex-col">
+                    <h6 className="text-lg font-medium text-green-400 mb-4 tracking-wide flex items-center">
+                      <span className="text-2xl mr-3">✅</span>
+                      STRENGTHS
+                    </h6>
+                    <div className="flex-1 overflow-y-auto space-y-3">
+                      {analysis.property_insights.strengths && analysis.property_insights.strengths.length > 0 ? (
+                        analysis.property_insights.strengths.map((strength, index) => (
+                          <div key={index} className="bg-green-800/40 p-4 rounded-lg border border-green-500/20 hover:bg-green-800/50 transition-colors">
+                            <div className="flex items-start space-x-3">
+                              <span className="text-green-400 mt-1 text-lg">✓</span>
+                              <span className="text-green-200 text-sm leading-relaxed font-light">{strength}</span>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="flex-1 flex items-center justify-center">
+                          <div className="text-center text-green-300">
+                            <div className="text-4xl mb-2">🏢</div>
+                            <p>No specific strengths identified</p>
                           </div>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </div>
-                )}
 
-                {/* Concerns */}
-                {analysis.property_insights.concerns && analysis.property_insights.concerns.length > 0 && (
-                  <div className="bg-yellow-900/20 border border-yellow-500/30 p-6 rounded-lg">
-                    <h6 className="text-md font-medium text-yellow-400 mb-4 tracking-wide">AREAS OF CONCERN</h6>
-                    <div className="space-y-3">
-                      {analysis.property_insights.concerns.map((concern, index) => (
-                        <div key={index} className="bg-yellow-800/30 p-3 rounded border border-yellow-500/20">
-                          <div className="flex items-start space-x-3">
-                            <span className="text-yellow-400 mt-1 text-lg">⚠</span>
-                            <span className="text-yellow-300 text-sm leading-relaxed">{concern}</span>
+                  {/* Concerns */}
+                  <div className="bg-gradient-to-br from-yellow-900/30 to-yellow-800/20 border border-yellow-500/30 p-6 rounded-xl shadow-lg h-[550px] flex flex-col">
+                    <h6 className="text-lg font-medium text-yellow-400 mb-4 tracking-wide flex items-center">
+                      <span className="text-2xl mr-3">⚠️</span>
+                      CONCERNS
+                    </h6>
+                    <div className="flex-1 overflow-y-auto space-y-3">
+                      {analysis.property_insights.concerns && analysis.property_insights.concerns.length > 0 ? (
+                        analysis.property_insights.concerns.map((concern, index) => (
+                          <div key={index} className="bg-yellow-800/40 p-4 rounded-lg border border-yellow-500/20 hover:bg-yellow-800/50 transition-colors">
+                            <div className="flex items-start space-x-3">
+                              <span className="text-yellow-400 mt-1 text-lg">⚠</span>
+                              <span className="text-yellow-200 text-sm leading-relaxed font-light">{concern}</span>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="flex-1 flex items-center justify-center">
+                          <div className="text-center text-yellow-300">
+                            <div className="text-4xl mb-2">✅</div>
+                            <p>No major concerns identified</p>
                           </div>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              ) : (
+                <div className="bg-gradient-to-br from-gray-900/30 to-gray-800/20 border border-gray-500/30 p-12 rounded-xl text-center h-[550px] flex items-center justify-center">
+                  <div>
+                    <span className="text-gray-400 text-6xl mb-4 block">🏢</span>
+                    <p className="text-gray-300 text-lg">No specific property insights available for this document.</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {/* Risk Assessment Tab */}
         {activeTab === 'risks' && (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 mb-4">
-              <span className="w-3 h-3 bg-red-400 rounded-full"></span>
-              <h5 className="text-lg font-medium text-red-400 tracking-wide">RISK ASSESSMENT</h5>
+          <div className="h-full flex flex-col animate-in slide-in-from-right-4 duration-300">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-8 h-8 bg-red-400 rounded-lg flex items-center justify-center shadow-lg shadow-red-400/40">
+                <RiskIcon size={16} className="text-black" />
+              </div>
+              <h5 className="text-xl font-light text-red-400 tracking-wide">RISK ASSESSMENT</h5>
             </div>
             
-            {analysis.risks && analysis.risks.length > 0 ? (
-              <div className="bg-red-900/20 border border-red-500/30 p-6 rounded-lg">
-                <div className="space-y-4">
-                  {analysis.risks.map((risk, index) => (
-                    <div key={index} className="bg-red-800/30 p-4 rounded border border-red-500/20">
-                      <div className="flex items-start space-x-3">
-                        <span className="text-red-400 mt-1 text-lg">⚠</span>
-                        <span className="text-red-300 text-sm leading-relaxed">{risk}</span>
+            <div className="flex-1">
+              {analysis.risks && analysis.risks.length > 0 ? (
+                <div className="bg-gradient-to-br from-red-900/30 to-red-800/20 border border-red-500/30 p-6 rounded-xl shadow-lg h-[550px] flex flex-col">
+                  <div className="flex-1 overflow-y-auto space-y-4">
+                    {analysis.risks.map((risk, index) => (
+                      <div key={index} className="bg-red-800/40 p-6 rounded-lg border border-red-500/20 hover:bg-red-800/50 transition-colors min-h-[80px] flex items-center">
+                        <div className="flex items-start space-x-4 w-full">
+                          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <span className="text-white font-bold text-sm">{index + 1}</span>
+                          </div>
+                          <span className="text-red-200 text-sm leading-relaxed font-light">{risk}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="bg-green-900/20 border border-green-500/30 p-6 rounded-lg text-center">
-                <span className="text-green-400 text-4xl mb-4 block">✓</span>
-                <p className="text-green-300">No significant risks identified in this document.</p>
-              </div>
-            )}
+              ) : (
+                <div className="bg-gradient-to-br from-green-900/30 to-green-800/20 border border-green-500/30 p-12 rounded-xl text-center h-[550px] flex items-center justify-center">
+                  <div>
+                    <span className="text-green-400 text-6xl mb-4 block">✅</span>
+                    <h6 className="text-green-400 text-xl font-medium mb-2">No Major Risks Identified</h6>
+                    <p className="text-green-300 text-lg">This document shows minimal risk factors for the investment.</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {/* Recommendations Tab */}
         {activeTab === 'recommendations' && (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 mb-4">
-              <span className="w-3 h-3 bg-cyan-400 rounded-full"></span>
-              <h5 className="text-lg font-medium text-cyan-400 tracking-wide">ACTIONABLE RECOMMENDATIONS</h5>
+          <div className="h-full flex flex-col animate-in slide-in-from-right-4 duration-300">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-8 h-8 bg-cyan-400 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-400/40">
+                <ActionsIcon size={16} className="text-black" />
+              </div>
+              <h5 className="text-xl font-light text-cyan-400 tracking-wide">ACTION ITEMS</h5>
             </div>
             
-            {analysis.recommendations && analysis.recommendations.length > 0 ? (
-              <div className="bg-cyan-900/20 border border-cyan-500/30 p-6 rounded-lg">
-                <div className="space-y-4">
-                  {analysis.recommendations.map((rec, index) => (
-                    <div key={index} className="bg-cyan-800/30 p-4 rounded border border-cyan-500/20">
-                      <div className="flex items-start space-x-3">
-                        <span className="text-cyan-400 mt-1 text-lg">→</span>
-                        <span className="text-cyan-300 text-sm leading-relaxed">{rec}</span>
+            <div className="flex-1">
+              {analysis.recommendations && analysis.recommendations.length > 0 ? (
+                <div className="bg-gradient-to-br from-cyan-900/30 to-cyan-800/20 border border-cyan-500/30 p-6 rounded-xl shadow-lg h-[550px] flex flex-col">
+                  <div className="flex-1 overflow-y-auto space-y-4">
+                    {analysis.recommendations.map((rec, index) => (
+                      <div key={index} className="bg-cyan-800/40 p-6 rounded-lg border border-cyan-500/20 hover:bg-cyan-800/50 transition-colors min-h-[80px] flex items-center">
+                        <div className="flex items-start space-x-4 w-full">
+                          <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <span className="text-white font-bold text-sm">{index + 1}</span>
+                          </div>
+                          <span className="text-cyan-200 text-sm leading-relaxed font-light">{rec}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="bg-gray-900/20 border border-gray-500/30 p-6 rounded-lg text-center">
-                <span className="text-gray-400 text-4xl mb-4 block">📋</span>
-                <p className="text-gray-300">No specific recommendations provided for this document.</p>
-              </div>
-            )}
+              ) : (
+                <div className="bg-gradient-to-br from-gray-900/30 to-gray-800/20 border border-gray-500/30 p-12 rounded-xl text-center h-[550px] flex items-center justify-center">
+                  <div>
+                    <span className="text-gray-400 text-6xl mb-4 block">📋</span>
+                    <h6 className="text-gray-400 text-xl font-medium mb-2">No Specific Actions Required</h6>
+                    <p className="text-gray-300 text-lg">No immediate recommendations provided for this document.</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
-        {/* Confidence Score Tab */}
+        {/* Enhanced Confidence Score Tab */}
         {activeTab === 'confidence' && (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 mb-4">
-              <span className="w-3 h-3 bg-purple-400 rounded-full"></span>
-              <h5 className="text-lg font-medium text-purple-400 tracking-wide">AI CONFIDENCE SCORE</h5>
+          <div className="h-full flex flex-col animate-in slide-in-from-right-4 duration-300">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-8 h-8 bg-purple-400 rounded-lg flex items-center justify-center shadow-lg shadow-purple-400/40">
+                <ConfidenceIcon size={16} className="text-black" />
+              </div>
+              <h5 className="text-xl font-light text-purple-400 tracking-wide">AI CONFIDENCE SCORE</h5>
             </div>
             
-            <div className="bg-purple-900/20 border border-purple-500/30 p-8 rounded-lg">
-              <div className="text-center space-y-6">
-                <div className="relative w-32 h-32 mx-auto">
-                  <div className="absolute inset-0 rounded-full border-8 border-purple-800"></div>
-                  <div 
-                    className="absolute inset-0 rounded-full border-8 border-purple-400"
-                    style={{
-                      clipPath: `polygon(50% 50%, 50% 0%, ${50 + (analysis.confidence * 50)}% 0%, ${50 + (analysis.confidence * 50)}% 100%, 50% 100%)`
-                    }}
-                  ></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-purple-400">{Math.round(analysis.confidence * 100)}%</div>
-                      <div className="text-xs text-purple-300">CONFIDENCE</div>
+            <div className="flex-1">
+              <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 border border-purple-500/30 p-8 rounded-xl shadow-lg h-[550px] flex flex-col">
+                <div className="text-center space-y-8 flex-1 flex flex-col justify-center">
+                  {/* Enhanced Circular Progress */}
+                  <div className="relative w-40 h-40 mx-auto">
+                    <svg className="w-40 h-40 transform -rotate-90" viewBox="0 0 144 144">
+                      <circle
+                        cx="72"
+                        cy="72"
+                        r="60"
+                        stroke="currentColor"
+                        strokeWidth="8"
+                        fill="none"
+                        className="text-purple-800"
+                      />
+                      <circle
+                        cx="72"
+                        cy="72"
+                        r="60"
+                        stroke="currentColor"
+                        strokeWidth="8"
+                        fill="none"
+                        strokeDasharray={`${2 * Math.PI * 60}`}
+                        strokeDashoffset={`${2 * Math.PI * 60 * (1 - analysis.confidence)}`}
+                        className="text-purple-400 transition-all duration-1000"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-4xl font-bold text-purple-400 mb-1">{Math.round(analysis.confidence * 100)}%</div>
+                        <div className="text-xs text-purple-300 tracking-wider">CONFIDENCE</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="space-y-3">
-                  <h6 className="text-md font-medium text-purple-300 tracking-wide">ANALYSIS RELIABILITY</h6>
-                  <div className="bg-purple-800/30 p-4 rounded border border-purple-500/20">
-                    <p className="text-purple-200 text-sm leading-relaxed">
-                      {analysis.confidence >= 0.8 ? "High confidence - The analysis is based on clear, comprehensive data with minimal ambiguity." :
-                       analysis.confidence >= 0.6 ? "Moderate confidence - The analysis is reasonably reliable but may benefit from additional data verification." :
-                       "Lower confidence - The analysis may require additional documentation or clarification for optimal accuracy."}
-                    </p>
+                  
+                  {/* Confidence Analysis */}
+                  <div className="space-y-4">
+                    <h6 className="text-lg font-medium text-purple-300 tracking-wide">ANALYSIS RELIABILITY</h6>
+                    <div className="bg-purple-800/40 p-6 rounded-lg border border-purple-500/20 min-h-[120px] flex items-center">
+                      <p className="text-purple-200 text-base leading-relaxed font-light">
+                        {analysis.confidence >= 0.8 ? 
+                          "🎯 High Confidence - The analysis is based on clear, comprehensive data with minimal ambiguity. Results are highly reliable for decision-making." :
+                         analysis.confidence >= 0.6 ? 
+                          "⚖️ Moderate Confidence - The analysis is reasonably reliable but may benefit from additional data verification or supplementary documentation." :
+                          "⚠️ Lower Confidence - The analysis may require additional documentation, clarification, or expert review for optimal accuracy and reliability."}
+                      </p>
+                    </div>
+                    
+                    {/* Confidence Breakdown */}
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="text-center p-4 bg-purple-800/20 rounded-lg border border-purple-500/20 h-[80px] flex flex-col justify-center">
+                        <div className="text-lg font-bold text-purple-400">
+                          {analysis.confidence >= 0.8 ? '🟢' : analysis.confidence >= 0.6 ? '🟡' : '🔴'}
+                        </div>
+                        <div className="text-xs text-purple-300 mt-2">RELIABILITY</div>
+                      </div>
+                      <div className="text-center p-4 bg-purple-800/20 rounded-lg border border-purple-500/20 h-[80px] flex flex-col justify-center">
+                        <div className="text-lg font-bold text-purple-400">
+                          {Object.keys(analysis.key_metrics || {}).length}
+                        </div>
+                        <div className="text-xs text-purple-300 mt-2">DATA POINTS</div>
+                      </div>
+                      <div className="text-center p-4 bg-purple-800/20 rounded-lg border border-purple-500/20 h-[80px] flex flex-col justify-center">
+                        <div className="text-lg font-bold text-purple-400">
+                          {analysis.risks?.length || 0}
+                        </div>
+                        <div className="text-xs text-purple-300 mt-2">RISK FACTORS</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
