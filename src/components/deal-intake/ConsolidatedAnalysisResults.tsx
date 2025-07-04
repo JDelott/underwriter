@@ -33,6 +33,35 @@ interface ConsolidatedAnalysisResultsProps {
   documents: Document[];
 }
 
+const cleanDocumentName = (filename: string): string => {
+  // Remove file extensions
+  let cleanName = filename.replace(/\.(txt|pdf|doc|docx|xlsx|csv)$/i, '');
+  
+  // Remove timestamps (ISO format or similar patterns)
+  cleanName = cleanName.replace(/-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z/g, '');
+  cleanName = cleanName.replace(/-\d{13,}/g, ''); // Remove long timestamp numbers
+  
+  // Replace hyphens and underscores with spaces
+  cleanName = cleanName.replace(/[-_]/g, ' ');
+  
+  // Capitalize words and handle common abbreviations
+  cleanName = cleanName.replace(/\b\w+/g, (word) => {
+    const lowerWord = word.toLowerCase();
+    // Handle common real estate terms
+    if (lowerWord === 'noi') return 'NOI';
+    if (lowerWord === 'roi') return 'ROI';
+    if (lowerWord === 'cap') return 'Cap';
+    if (lowerWord === 'dscr') return 'DSCR';
+    if (lowerWord === 'ltv') return 'LTV';
+    if (lowerWord === 'p&l' || lowerWord === 'pl') return 'P&L';
+    
+    // Capitalize first letter
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  });
+  
+  return cleanName.trim();
+};
+
 export default function ConsolidatedAnalysisResults({ documents }: ConsolidatedAnalysisResultsProps) {
   const [activeTab, setActiveTab] = useState<string>('');
 
@@ -126,13 +155,13 @@ export default function ConsolidatedAnalysisResults({ documents }: ConsolidatedA
                 COMPREHENSIVE ANALYSIS
               </h2>
               <p className="text-sm text-gray-400">
-                {analyzedDocuments.length} document{analyzedDocuments.length !== 1 ? 's' : ''} analyzed • Claude 4 AI
+                {analyzedDocuments.length} document{analyzedDocuments.length !== 1 ? 's' : ''} analyzed • AI Powered
               </p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <div className="text-xs text-gray-400 bg-black/50 px-3 py-2 rounded-lg border border-gray-600">
-              ANTHROPIC CLAUDE 3.5 SONNET
+              AI POWERED
             </div>
             <div className="text-xs text-emerald-400 bg-emerald-900/20 px-3 py-2 rounded-lg border border-emerald-500/30">
               REAL-TIME ANALYSIS
@@ -192,7 +221,7 @@ export default function ConsolidatedAnalysisResults({ documents }: ConsolidatedA
                       </div>
                       <div>
                         <h4 className="text-lg font-medium text-white mb-1 tracking-wide">
-                          {doc.original_filename}
+                          {cleanDocumentName(doc.original_filename)}
                         </h4>
                         <div className="flex items-center space-x-4 text-sm text-gray-400">
                           <span>Uploaded: {new Date(doc.created_at).toLocaleDateString()}</span>

@@ -27,6 +27,35 @@ interface TabbedAnalysisResultsProps {
 
 type TabType = 'summary' | 'financial' | 'property' | 'risks' | 'recommendations' | 'confidence';
 
+const cleanDocumentName = (filename: string): string => {
+  // Remove file extensions
+  let cleanName = filename.replace(/\.(txt|pdf|doc|docx|xlsx|csv)$/i, '');
+  
+  // Remove timestamps (ISO format or similar patterns)
+  cleanName = cleanName.replace(/-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z/g, '');
+  cleanName = cleanName.replace(/-\d{13,}/g, ''); // Remove long timestamp numbers
+  
+  // Replace hyphens and underscores with spaces
+  cleanName = cleanName.replace(/[-_]/g, ' ');
+  
+  // Capitalize words and handle common abbreviations
+  cleanName = cleanName.replace(/\b\w+/g, (word) => {
+    const lowerWord = word.toLowerCase();
+    // Handle common real estate terms
+    if (lowerWord === 'noi') return 'NOI';
+    if (lowerWord === 'roi') return 'ROI';
+    if (lowerWord === 'cap') return 'Cap';
+    if (lowerWord === 'dscr') return 'DSCR';
+    if (lowerWord === 'ltv') return 'LTV';
+    if (lowerWord === 'p&l' || lowerWord === 'pl') return 'P&L';
+    
+    // Capitalize first letter
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  });
+  
+  return cleanName.trim();
+};
+
 export default function TabbedAnalysisResults({ analysis, documentName }: TabbedAnalysisResultsProps) {
   const [activeTab, setActiveTab] = useState<TabType>('summary');
 
@@ -57,7 +86,7 @@ export default function TabbedAnalysisResults({ analysis, documentName }: Tabbed
 
   return (
     <div className="bg-gradient-to-br from-black/40 to-black/20 border border-white/[0.08] rounded-lg overflow-hidden shadow-2xl">
-      {/* Compact Header */}
+      {/* Clean Header - No Branding */}
       <div className="bg-gradient-to-r from-black/60 to-black/40 p-4 border-b border-white/[0.08]">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -65,13 +94,13 @@ export default function TabbedAnalysisResults({ analysis, documentName }: Tabbed
               <AIIcon size={12} className="text-black" />
             </div>
             <div>
-              <h4 className="text-sm font-medium text-emerald-400 tracking-wide">CLAUDE ANALYSIS</h4>
-              <p className="text-xs text-gray-500 truncate max-w-[200px]">{documentName}</p>
+              <h4 className="text-sm font-medium text-emerald-400 tracking-wide">DOCUMENT ANALYSIS</h4>
+              <p className="text-xs text-gray-500 truncate max-w-[300px]">{cleanDocumentName(documentName)}</p>
             </div>
           </div>
-          <div className="text-xs text-gray-500 bg-black/50 px-2 py-1 rounded text-center">
-            <div className="text-emerald-400 font-bold">ANTHROPIC</div>
-            <div>CLAUDE 3.5</div>
+          <div className="text-xs text-gray-500 bg-black/50 px-3 py-2 rounded">
+            <div className="text-emerald-400 font-bold">AI POWERED</div>
+            <div>ANALYSIS</div>
           </div>
         </div>
       </div>
@@ -108,9 +137,133 @@ export default function TabbedAnalysisResults({ analysis, documentName }: Tabbed
               </div>
               <h5 className="text-xl font-light text-emerald-400 tracking-wide">EXECUTIVE SUMMARY</h5>
             </div>
-            <div className="flex-1 flex flex-col">
-              <div className="bg-gradient-to-br from-emerald-900/30 to-emerald-800/20 border border-emerald-500/30 p-8 rounded-xl shadow-lg flex-1 flex items-center">
-                <p className="text-gray-200 leading-relaxed text-base font-light w-full">{analysis.summary}</p>
+            
+            <div className="flex-1 space-y-6">
+              {/* High-Level Analytics Overview */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-gradient-to-br from-emerald-900/40 to-emerald-800/20 border border-emerald-500/30 p-4 rounded-xl shadow-lg text-center">
+                  <div className="text-2xl font-bold text-emerald-400 mb-1">
+                    {Math.round(analysis.confidence * 100)}%
+                  </div>
+                  <div className="text-xs text-emerald-300 tracking-wide uppercase">AI Confidence</div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-500/30 p-4 rounded-xl shadow-lg text-center">
+                  <div className="text-2xl font-bold text-blue-400 mb-1">
+                    {Object.keys(analysis.key_metrics || {}).length}
+                  </div>
+                  <div className="text-xs text-blue-300 tracking-wide uppercase">Key Metrics</div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-red-900/40 to-red-800/20 border border-red-500/30 p-4 rounded-xl shadow-lg text-center">
+                  <div className="text-2xl font-bold text-red-400 mb-1">
+                    {analysis.risks?.length || 0}
+                  </div>
+                  <div className="text-xs text-red-300 tracking-wide uppercase">Risk Factors</div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-cyan-900/40 to-cyan-800/20 border border-cyan-500/30 p-4 rounded-xl shadow-lg text-center">
+                  <div className="text-2xl font-bold text-cyan-400 mb-1">
+                    {analysis.recommendations?.length || 0}
+                  </div>
+                  <div className="text-xs text-cyan-300 tracking-wide uppercase">Action Items</div>
+                </div>
+              </div>
+
+              {/* Main Summary Content */}
+              <div className="bg-gradient-to-br from-emerald-900/30 to-emerald-800/20 border border-emerald-500/30 p-8 rounded-xl shadow-lg flex-1 min-h-[300px]">
+                <div className="flex flex-col h-full">
+                  <div className="flex items-center justify-between mb-6">
+                    <h6 className="text-lg font-medium text-emerald-300 tracking-wide uppercase">Document Analysis</h6>
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-3 h-3 rounded-full ${
+                        analysis.confidence >= 0.8 ? 'bg-green-400' : 
+                        analysis.confidence >= 0.6 ? 'bg-yellow-400' : 'bg-red-400'
+                      }`}></div>
+                      <span className="text-xs text-emerald-300">
+                        {analysis.confidence >= 0.8 ? 'HIGH CONFIDENCE' : 
+                         analysis.confidence >= 0.6 ? 'MODERATE CONFIDENCE' : 'LOW CONFIDENCE'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 flex items-center justify-center">
+                    <div className="max-w-4xl mx-auto text-center">
+                      <p className="text-gray-100 leading-relaxed text-xl font-light italic mb-6">
+                        "{analysis.summary}"
+                      </p>
+                      
+                      {/* Key Insights Pills */}
+                      <div className="flex flex-wrap justify-center gap-3 mt-8">
+                        {analysis.confidence >= 0.8 && (
+                          <div className="bg-green-400/20 border border-green-400/40 px-4 py-2 rounded-full">
+                            <span className="text-green-300 text-sm font-medium">High Reliability Analysis</span>
+                          </div>
+                        )}
+                        
+                        {analysis.key_metrics && Object.keys(analysis.key_metrics).length > 0 && (
+                          <div className="bg-blue-400/20 border border-blue-400/40 px-4 py-2 rounded-full">
+                            <span className="text-blue-300 text-sm font-medium">Financial Data Available</span>
+                          </div>
+                        )}
+                        
+                        {analysis.property_insights?.strengths && analysis.property_insights.strengths.length > 0 && (
+                          <div className="bg-emerald-400/20 border border-emerald-400/40 px-4 py-2 rounded-full">
+                            <span className="text-emerald-300 text-sm font-medium">Property Strengths Identified</span>
+                          </div>
+                        )}
+                        
+                        {(!analysis.risks || analysis.risks.length === 0) && (
+                          <div className="bg-green-400/20 border border-green-400/40 px-4 py-2 rounded-full">
+                            <span className="text-green-300 text-sm font-medium">Low Risk Profile</span>
+                          </div>
+                        )}
+                        
+                        {analysis.risks && analysis.risks.length > 0 && (
+                          <div className="bg-yellow-400/20 border border-yellow-400/40 px-4 py-2 rounded-full">
+                            <span className="text-yellow-300 text-sm font-medium">Risk Factors Present</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Bottom Action Bar */}
+                  <div className="mt-6 pt-6 border-t border-emerald-500/20">
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-emerald-300">
+                        Document: <span className="text-white font-medium">{cleanDocumentName(documentName)}</span>
+                      </div>
+                      <div className="flex items-center space-x-4 text-xs text-emerald-300">
+                        <span>AI Analysis</span>
+                        <div className="w-1 h-1 bg-emerald-400 rounded-full"></div>
+                        <span>{new Date().toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Navigation Hints */}
+              <div className="bg-gradient-to-r from-gray-900/30 to-gray-800/20 border border-gray-500/20 p-4 rounded-xl">
+                <div className="flex items-center justify-center space-x-8 text-xs text-gray-400">
+                  <div className="flex items-center space-x-2">
+                    <FinancialIcon size={12} className="text-blue-400" />
+                    <span>Financial metrics in FINANCIAL tab</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <PropertyIcon size={12} className="text-green-400" />
+                    <span>Property details in PROPERTY tab</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RiskIcon size={12} className="text-red-400" />
+                    <span>Risk analysis in RISKS tab</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <ActionsIcon size={12} className="text-cyan-400" />
+                    <span>Next steps in ACTIONS tab</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -21,6 +21,35 @@ interface Document {
   created_at: string;
 }
 
+const cleanDocumentName = (filename: string): string => {
+  // Remove file extensions
+  let cleanName = filename.replace(/\.(txt|pdf|doc|docx|xlsx|csv)$/i, '');
+  
+  // Remove timestamps (ISO format or similar patterns)
+  cleanName = cleanName.replace(/-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z/g, '');
+  cleanName = cleanName.replace(/-\d{13,}/g, ''); // Remove long timestamp numbers
+  
+  // Replace hyphens and underscores with spaces
+  cleanName = cleanName.replace(/[-_]/g, ' ');
+  
+  // Capitalize words and handle common abbreviations
+  cleanName = cleanName.replace(/\b\w+/g, (word) => {
+    const lowerWord = word.toLowerCase();
+    // Handle common real estate terms
+    if (lowerWord === 'noi') return 'NOI';
+    if (lowerWord === 'roi') return 'ROI';
+    if (lowerWord === 'cap') return 'Cap';
+    if (lowerWord === 'dscr') return 'DSCR';
+    if (lowerWord === 'ltv') return 'LTV';
+    if (lowerWord === 'p&l' || lowerWord === 'pl') return 'P&L';
+    
+    // Capitalize first letter
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  });
+  
+  return cleanName.trim();
+};
+
 export default function DealPage() {
   const params = useParams();
   const router = useRouter();
@@ -385,7 +414,7 @@ Special Terms:
                        doc.original_filename.toLowerCase().includes('lease') ? '📄' : '📋'}
                     </div>
                     <div>
-                      <h3 className="text-white font-medium tracking-wide">{doc.original_filename}</h3>
+                      <h3 className="text-white font-medium tracking-wide">{cleanDocumentName(doc.original_filename)}</h3>
                       <p className="text-sm text-gray-400">
                         {new Date(doc.created_at).toLocaleDateString()}
                       </p>
