@@ -183,3 +183,29 @@ export async function analyzeBatchDocuments(documents: Array<{id: number, conten
   
   return results;
 }
+
+export async function extractDataWithClaude(prompt: string) {
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 2000,
+      temperature: 0.3,
+      messages: [
+        {
+          role: 'user',
+          content: prompt
+        }
+      ]
+    });
+
+    const content = response.content[0];
+    if (content.type === 'text') {
+      return content.text;
+    } else {
+      throw new Error('Unexpected response type');
+    }
+  } catch (error) {
+    console.error('Claude API error:', error);
+    throw error;
+  }
+}

@@ -3,10 +3,13 @@
 import { useState, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { PortfolioProperty } from '@/types';
+import BulkUpload from '@/components/portfolio/BulkUpload';
+import PropertyChat from '@/components/portfolio/PropertyChat';
 
 export default function PortfolioPage() {
   const [properties, setProperties] = useState<PortfolioProperty[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -72,16 +75,31 @@ export default function PortfolioPage() {
             </div>
           </div>
           
-          <button
-            onClick={() => setShowAddForm(!showAddForm)}
-            className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
-          >
-            {showAddForm ? 'CANCEL' : 'ADD PROPERTY'}
-          </button>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-300 hover:to-green-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-400/40 hover:shadow-emerald-400/60 tracking-wide"
+            >
+              {showAddForm ? 'CANCEL' : 'ADD PROPERTY'}
+            </button>
+            <button
+              onClick={() => setShowBulkUpload(!showBulkUpload)}
+              className="bg-gradient-to-r from-blue-400 to-cyan-500 hover:from-blue-300 hover:to-cyan-400 text-black px-8 py-4 font-bold text-lg transition-all duration-200 shadow-lg shadow-blue-400/40 hover:shadow-blue-400/60 tracking-wide"
+            >
+              {showBulkUpload ? 'CANCEL' : 'BULK UPLOAD'}
+            </button>
+          </div>
         </div>
 
         {showAddForm && (
           <AddPropertyForm onSubmit={handleAddProperty} onCancel={() => setShowAddForm(false)} />
+        )}
+
+        {showBulkUpload && (
+          <BulkUpload onUploadComplete={() => {
+            fetchPortfolio();
+            setShowBulkUpload(false);
+          }} />
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -225,6 +243,8 @@ const AddPropertyForm = ({ onSubmit, onCancel }: { onSubmit: (propertyData: Part
 };
 
 const PortfolioPropertyCard = ({ property }: { property: PortfolioProperty }) => {
+  const [showChat, setShowChat] = useState(false);
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -261,27 +281,45 @@ const PortfolioPropertyCard = ({ property }: { property: PortfolioProperty }) =>
       </div>
 
       <div className="mt-4 pt-4 border-t border-gray-600">
-        <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="grid grid-cols-3 gap-2 text-xs mb-4">
           <div className="text-center">
             <div className="text-emerald-400 font-bold">
-              {property.latest_cap_rate ? `${(property.latest_cap_rate * 100).toFixed(1)}%` : 'N/A'}
+              {property.latest_cap_rate ? `${(property.latest_cap_rate * 100).toFixed(1)}%` : '0.0%'}
             </div>
             <div className="text-gray-400">Cap Rate</div>
           </div>
           <div className="text-center">
             <div className="text-blue-400 font-bold">
-              {property.latest_noi ? formatCurrency(property.latest_noi) : 'N/A'}
+              {property.latest_noi ? formatCurrency(property.latest_noi) : '$0'}
             </div>
             <div className="text-gray-400">NOI</div>
           </div>
           <div className="text-center">
             <div className="text-purple-400 font-bold">
-              {property.latest_occupancy ? `${(property.latest_occupancy * 100).toFixed(0)}%` : 'N/A'}
+              {property.latest_occupancy ? `${(property.latest_occupancy * 100).toFixed(0)}%` : '0%'}
             </div>
             <div className="text-gray-400">Occupancy</div>
           </div>
         </div>
+
+        {/* Chat Button */}
+        <button
+          onClick={() => setShowChat(!showChat)}
+          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white px-4 py-2 text-sm font-medium transition-all duration-200 rounded"
+        >
+          {showChat ? 'Hide Chat' : '💬 Chat with Document'}
+        </button>
       </div>
+
+      {/* Chat Component */}
+      {showChat && (
+        <div className="mt-4">
+          <PropertyChat
+            propertyId={property.id}
+            propertyName={property.name}
+          />
+        </div>
+      )}
     </div>
   );
 };

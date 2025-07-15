@@ -10,11 +10,17 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.56.0",
+    "@types/aws-sdk": "^0.0.42",
     "@types/pg": "^8.15.4",
+    "aws-sdk": "^2.1692.0",
+    "mammoth": "^1.9.1",
     "next": "15.3.5",
+    "pdf2json": "^3.1.4",
+    "pdf2pic": "^3.2.0",
     "pg": "^8.16.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tesseract.js": "^6.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

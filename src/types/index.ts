@@ -56,6 +56,8 @@ export interface PortfolioProperty {
   market_area?: string;
   submarket?: string;
   notes?: string;
+  pdf_document_path?: string;
+  extracted_text?: string;
   created_at: string;
   updated_at: string;
   latest_noi?: number;
