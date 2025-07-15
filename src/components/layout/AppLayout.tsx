@@ -66,6 +66,13 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
                 {isAnalysisPage && dealId && (
                   <span className="text-emerald-400 tracking-wide">ANALYSIS</span>
                 )}
+
+                <Link
+                  href="/portfolio"
+                  className="px-4 py-2 font-bold transition-all duration-200 tracking-wide text-gray-300 hover:text-emerald-400 rounded"
+                >
+                  PORTFOLIO
+                </Link>
               </nav>
             </div>
           </div>
